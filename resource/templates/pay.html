@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeePet - Premium Pet Sitter</title>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://getbootstrap.com/docs/5.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+</head>
+<link href="/css/header.css" rel="stylesheet">
+<style>
+    .container {
+        text-align: center;
+        margin: 20px;
+    }
+</style>
+<body>
+<div class="container">
+    <br/><br/>
+
+    <h1>결제 페이지</h1>
+
+    <br/><br/>
+
+    <p>총 금액: <span id="fuel-cost-display"></span></p>
+
+    <br/><br/>
+
+    <button type="button" class="btn btn-primary" onclick="pay();">결제하기</button>
+
+    <input type="hidden" id="loginId" th:value="${session.loginId}">
+    <input type="hidden" id="loginName" th:value="${session.loginName}">
+    <input type="hidden" id="loginPhone" th:value="${session.loginPhone}">
+    <input type="hidden" id="loginAddress" th:value="${session.loginAddress}">
+</div>
+
+<form id="paymentForm" action="/orderSave" method="post">
+    <input type="hidden" id="merchant_Uid" name="Merchant_Uid">  <!-- Merchant_Uid -->
+    <input type="hidden" id="amount" name="Amount">             <!-- Amount -->
+    <input type="hidden" id="product_Name" name="Product_Name" value="유류비"> <!-- Product_Name -->
+    <input type="hidden" id="buyer_Name" name="Buyer_Name" th:value="${session.loginName}"> <!-- Buyer_Name -->
+    <input type="hidden" id="buyer_Tel" name="Buyer_Tel" th:value="${session.loginPhone}">   <!-- Buyer_Tel -->
+    <input type="hidden" id="buyer_Addr" name="Buyer_Addr" th:value="${session.loginAddress}"> <!-- Buyer_Addr -->
+    <input type="hidden" id="userId" name="UserId" th:value="${session.loginId}">         <!-- UserId -->
+
+    <button type="submit" id="submitButton" style="display: none;">폼 제출</button> <!-- 숨겨진 제출 버튼 -->
+</form>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script>
+    $(document).ready(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const fuelCost = urlParams.get("fuelCost");
+
+        if (fuelCost) {
+            const formattedCost = Math.round(parseFloat(fuelCost)).toLocaleString();
+            $("#fuel-cost-display").text(`${formattedCost} 원`);
+        }
+    });
+
+    // function pay() {
+    //     // 아임포트 결제 객체 초기화
+    //     let IMP = window.IMP;
+    //     IMP.init("imp65742330");
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const fuelCost = urlParams.get("fuelCost"); // URL 파라미터에서 fuelCost 값 가져오기
+    //     const merchantUid = 'merchant_' + new Date().getTime();
+    //
+    //
+    //     IMP.request_pay({
+    //         pg: 'kakaopay', // 결제 PG사
+    //         pay_method: 'card', // 결제 방법
+    //         merchant_uid: merchantUid, // 고유 주문 번호
+    //         name: "유류비 더치페이", // 결제 상품명 (예: "주문 결제")
+    //         amount: parseInt(fuelCost), // 결제 금액  파라미터에서 가져온 fuelCost 를 사용합니다.
+    //
+    //     }, function (rsp) {
+    //         if (rsp.success) {
+    //             console.log("결제 성공:", rsp);
+    //             alert("결제 성공!")
+    //             // 폼에 값 설정
+    //             $('#merchant_Uid').val(merchantUid);
+    //             $('#amount').val(parseInt(fuelCost));
+    //
+    //             // 폼 강제 제출 (숨겨진 submit 버튼 클릭)
+    //             $('#submitButton').click();
+    //
+    //
+    //         } else {
+    //             console.log("결제 실패:", rsp);
+    //             alert("결제에 실패하였습니다: " + rsp.error_msg);
+    //         }
+    //     });
+    // }
+
+    function pay() {
+        // 아임포트 결제 객체 초기화
+        let IMP = window.IMP;
+        IMP.init("imp65742330");
+        const urlParams = new URLSearchParams(window.location.search);
+        const fuelCost = urlParams.get("fuelCost"); // URL 파라미터에서 fuelCost 값 가져오기
+        const merchantUid = 'merchant_' + new Date().getTime();
+
+        IMP.request_pay({
+            pg: 'kakaopay', // 결제 PG사
+            pay_method: 'card', // 결제 방법
+            merchant_uid: merchantUid, // 고유 주문 번호
+            name: "유류비 더치페이", // 결제 상품명
+            amount: parseInt(fuelCost), // 결제 금액
+        }, function (rsp) {
+            if (rsp.success) {
+                console.log("결제 성공:", rsp);
+                alert("결제 성공!");
+
+                // 폼에 값 설정
+                $('#merchant_Uid').val(merchantUid);
+                $('#amount').val(parseInt(fuelCost));
+
+                // 폼 제출 함수 호출 (비동기)
+                submitFormAndRedirect(merchantUid, fuelCost); // 수정된 부분
+
+            } else {
+                console.log("결제 실패:", rsp);
+                alert("결제에 실패하였습니다: " + rsp.error_msg);
+            }
+        });
+    }
+
+    // 폼 제출과 리다이렉트를 처리하는 함수 (async/await 사용)
+    async function submitFormAndRedirect(merchantUid, fuelCost) {
+        try {
+            // 폼 제출 (비동기)
+            const response = await $.ajax({
+                url: $('#paymentForm').attr('action'), // 폼의 action 속성 사용
+                type: $('#paymentForm').attr('method'), // 폼의 method 속성 사용
+                data: $('#paymentForm').serialize(), // 폼 데이터 직렬화
+            });
+
+            // 폼 제출 성공 후 리다이렉트
+            console.log("폼 제출 성공:", response);
+            window.location.href = "/receipt?merchantUid=" + merchantUid + "&fuelCost=" + fuelCost;
+
+
+        } catch (error) {
+            console.error("폼 제출 실패:", error);
+            alert("폼 제출 중 오류가 발생했습니다.");
+        }
+    }
+
+
+
+</script>
+
+</body>
+</html>

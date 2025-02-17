@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>KeePet - Premium Pet Sitter</title>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  <style>
+    /*  스타일은 이전과 동일 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+    }
+
+    .receipt-container {
+      max-width: 400px;
+      height: 550px;
+      margin: 50px auto;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    .receipt-header {
+      text-align: center;
+      border-bottom: 1px dashed #ddd;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .receipt-header strong {
+      font-size: 18px;
+      color: #333;
+    }
+
+    #price {
+      font-size: 35px;
+      text-align: center;
+    }
+
+    .receipt-item {
+      margin-bottom: 10px;
+    }
+
+    .receipt-item strong {
+      display: block;
+      color: #555;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .receipt-item span {
+      font-size: 16px;
+      color: #333;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .button-group button {
+      width: 48%;
+      padding: 10px 0;
+      font-size: 14px;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #check {
+      background-color: gray;
+    }
+
+    #review {
+      background-color: #E4C9FF;
+    }
+
+    .error-message {
+      color: red;
+      text-align: center;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .sub {
+      color: gray;
+      gap: 20px;
+    }
+    .image-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 70px; /* 필요하면 부모 높이 설정 */
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <div class="receipt-container">
+    <div class="receipt-header">
+      <strong> 킵펫 결제 영수증</strong>
+    </div>
+
+    <div class="image-container">
+      <img src="/images/rpaw.png" alt="영수증" width="70" height="70" id="receipt"/>
+    </div>
+
+    <p id="price"><strong><span th:text="${#numbers.formatInteger(fuelCost, 0)}"></span> 원</strong></p>
+    <br><br>
+
+
+    <p><strong>주문 번호 :</strong> <span th:text="${merchantUid}"></span></p>
+    <br>
+    <ul>
+<!--      <li th:if="${order != null and order.Created_At != null}">-->
+        <p id="date"><strong>결제 일시 :</strong>
+          <span th:text="${#temporals.format(order.Created_At, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+    </ul>
+    <br>
+    <p class="sub"><strong>결제 수단 :</strong> 카카오페이 </p><br>
+    <p class="sub"><strong>할부 :</strong> 일시불 </p><br>
+    <p class="sub"><strong>포인트 적용 :</strong> 완료 </p><br>
+
+    <div class="button-group">
+      <button id="check">확인</button>
+      <button id="review">리뷰</button>
+    </div>
+
+    <div class="error-message" th:if="${errorMessage != null}">
+      <p style="color: red;" th:text="${errorMessage}">결제 오류가 발생했습니다.</p>
+    </div>
+  </div>
+</main>
+
+<script>
+  // "확인" 버튼 클릭 시 인덱스로 이동하고, 영수증 창을 닫기
+  document.getElementById("check").addEventListener("click", function() {
+    if (window.opener) {
+      // 부모 창을 인덱스로 리다이렉트
+      window.opener.location.href = "/";  // 인덱스 페이지로 이동
+    }
+    window.close();  // 현재 영수증 창을 닫음
+  });
+
+  // "확인" 버튼 클릭 시 인덱스로 이동하고, 영수증 창을 닫기
+  document.getElementById("review").addEventListener("click", function() {
+    if (window.opener) {
+      // 부모 창을 인덱스로 리다이렉트
+      window.opener.location.href = "/myPageForm";  // 인덱스 페이지로 이동
+    }
+    window.close();  // 현재 영수증 창을 닫음
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>KeePet - Premium Pet Sitter</title>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+        }
+
+        .main-container {
+            display: flex;
+        }
+
+        .tab-content {
+            display: none; /* 기본적으로 모든 탭 콘텐츠 숨김 */
+        }
+
+        .tab-content.active {
+            display: block; /* 활성화된 탭 콘텐츠만 보이도록 설정 */
+        }
+
+        .tab-button.active {
+            background-color: #ddd; /* 활성화된 버튼의 스타일 (예: 배경색 변경) */
+        }
+
+
+        .sidebar {
+            width: 200px;
+            gap: 20px;
+            background-color: #1A374D;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column; /* 세로 정렬 */
+            align-items: center; /* 가로 방향으로 중앙 정렬 */
+        }
+
+        .sidebar .tab-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: white;
+            border: 1px solid #6287a6;
+            cursor: pointer;
+            text-align: left;
+            border-radius: 4px;
+        }
+
+        .sidebar .tab-button.active {
+            background-color: #85AECE;
+            color: white;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .profile-image {
+            width: 150px; /* 원하는 원의 크기 설정 */
+            height: 150px; /* 정사각형으로 설정 */
+            border-radius: 50%; /* 원형으로 만듦 */
+            overflow: hidden; /* 이미지가 원 밖으로 나가지 않도록 */
+            display: flex; /* 중앙 정렬 */
+            justify-content: center; /* 수평 중앙 정렬 */
+            align-items: center; /* 수직 중앙 정렬 */
+            border: 2px solid #ccc; /* 선택적으로 테두리 추가 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 선택적으로 그림자 추가 */
+            background-color: white;
+        }
+
+        .profile-image img {
+            width: 100%; /* 원 안을 채우도록 설정 */
+            height: 100%; /* 원 안을 채우도록 설정 */
+            object-fit: cover; /* 이미지 비율 유지하며 원에 맞춤 */
+        }
+
+        .personal-info-area {
+            border: lightgrey 0.5px solid;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        /* 로고 스타일 */
+        #logo {
+            margin-bottom: 20px; /* 로고와 프로필 사진 사이 간격 */
+        }
+
+        /* 프로필 이미지 스타일 */
+        .profile-image {
+            width: 120px; /* 프로필 이미지 크기 */
+            height: 120px; /* 프로필 이미지 크기 */
+            border-radius: 50%; /* 원형 이미지 */
+            overflow: hidden; /* 이미지가 잘리도록 */
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 이미지 비율 유지하면서 잘리도록 */
+        }
+
+        /* 가로 정렬을 위한 컨테이너 스타일 */
+        .table-container {
+            display: flex;        /* 가로 배치 */
+            gap: 20px;            /* 테이블 사이의 간격 */
+            justify-content: space-between; /* 테이블 사이 여백 균등 */
+        }
+
+        /* 테이블 스타일 */
+        .board-table{
+            margin-top: 20px;
+            width: 50%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        /* 테이블 스타일링 */
+        .board-table th,
+        .board-table td {
+            border: 1px solid #ddd;  /* 테두리 */
+            padding: 12px;            /* 내부 여백 */
+            text-align: center;      /* 텍스트 중앙 정렬 */
+        }
+
+        .board-table th {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+        }
+
+        .diary-table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .diary-table th {
+            margin-top: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #ddd;
+            background-color: #f8f9fa;
+            font-weight: bold;
+            width: 30%;
+        }
+
+        .diary-table td {
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #ddd;
+            vertical-align: middle;
+        }
+
+        .dashboard-container {
+            width: 80%;
+            height: 80%;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .card h3 {
+            margin: 0;
+            color: #333;
+        }
+        .card p {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        /* 메인 컨텐츠 */
+        .content {
+            flex: 1;
+            padding: 10px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2x2 그리드 레이아웃 */
+            gap: 20px;
+        }
+
+        /* 예약 일정, 펫시터 매뉴얼, 담당 지역, 우수 펫시터 카드 */
+        .calendar-section, .manual-section, .region-section, .best-petsitter {
+            text-align: center;
+            background: white;
+            padding: 5px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* 달력 */
+        .calendar {
+            text-align: center;
+        }
+
+        #calendar-title {
+            text-align: center;
+        }
+
+        .calendar-header {
+
+            text-align: center;
+
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .calendar-header button {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .calendar-grid div {
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        #calendar-days {
+            display: contents;
+        }
+
+        #calendar-days div {
+            font-weight: normal;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        /* 예약 개수에 따라 원 색상 변경 */
+        #calendar-days div[data-schedule="1"] {
+            background-color: #B0C4DE; /* 연한 남색 */
+            color: white;
+        }
+
+        #calendar-days div[data-schedule="2"] {
+            background-color: #4682B4; /* 보통 남색 */
+            color: white;
+        }
+
+        #calendar-days div[data-schedule="3"],
+        #calendar-days div[data-schedule="4"],
+        #calendar-days div[data-schedule="5"] {
+            background-color: #1E3A5F; /* 진한 남색 */
+            color: white;
+        }
+
+        /* 호버 효과 */
+        #calendar-days div:hover {
+            background-color: #999999;
+            color: white;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .calendar-grid div {
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        #calendar-days {
+            display: contents;
+        }
+
+        #calendar-days div {
+            font-weight: normal;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+        }
+
+        /* 예약 개수에 따라 원 색상 변경 */
+        #calendar-days div[data-schedule="1"] {
+            background-color: #B0C4DE; /* 연한 남색 */
+            color: white;
+        }
+
+        #calendar-days div[data-schedule="2"] {
+            background-color: #4682B4; /* 보통 남색 */
+            color: white;
+        }
+
+        #calendar-days div[data-schedule="3"],
+        #calendar-days div[data-schedule="4"],
+        #calendar-days div[data-schedule="5"] {
+            background-color: #1E3A5F; /* 진한 남색 */
+            color: white;
+        }
+
+        /* 호버 효과 */
+        #calendar-days div:hover {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+
+        .reserved {
+            background-color: #FFDF91;
+            font-weight: bold;
+        }
+
+        /* 펫시터 매뉴얼 슬라이드 */
+        .manual-content {
+            position: relative;
+            text-align: center;
+        }
+
+        .manual-slide {
+            display: none;
+        }
+
+        .manual-slide.active {
+            display: block;
+        }
+
+        .prev, .next {
+
+
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+
+        /* 담당 지역 테이블 */
+        .region-section table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .region-section th, .region-section td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        /* 우수 펫시터 카드 */
+        .petsitter-card {
+            text-align: center;
+        }
+
+        .petsitter-img {
+            width: 200px;
+            height: 200px;
+            background: gray;
+            border-radius: 50%;
+            margin: 20px auto 10px;
+
+        }
+
+        .mini-modal {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            display: none;
+            pointer-events: none; /* 마우스 이벤트 방지 */
+            z-index: 100;
+        }
+
+        .has-reservation {
+            background-color: #ffdd57;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <!-- 사이드바 -->
+    <div class="sidebar">
+        <div id="logo"><a href="/"><img alt="logo" height="50" src="/images/logo.png" width="110"></a></div>
+        <div class="profile-image" id="pImage">
+            <img alt="프로필 사진" src="/images/admin-profile.png">
+        </div>
+
+        <button class="tab-button" data-tab="tab0">메인</button>
+        <button class="tab-button" data-tab="tab1">전체 회원 내역</button>
+        <button class="tab-button" data-tab="tab2">전체 신청 및 픽업 내역</button>
+        <button class="tab-button" data-tab="tab3">돌봄 일지 내역</button>
+    </div>
+
+
+    <div class="content-area">
+        <div class="tab-content active" id="tab0">
+            <main class="content">
+                <section class="calendar-section">
+                    <h2>이달 예약 일정</h2>
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <button class="prev" onclick="changeMonth(-1)">❮</button>
+                            <span id="calendar-title"></span>
+                            <button class="next" onclick="changeMonth(1)">❯</button>
+                        </div>
+                        <div class="calendar-grid">
+                            <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+                            <div id="calendar-days"></div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- 펫시터 매뉴얼 슬라이드 -->
+                <section class="manual-section">
+                    <h2>펫시터 매뉴얼</h2>
+                    <div class="manual-content">
+                        <div class="manual-slide active">
+                            <h3>1. 고객과 반려동물의 이름 기억하기</h3>
+                            <p>✅ 고객과 반려동물의 이름을 정확히 기억하고 존중하는 태도로 불러주세요.</p>
+                            <p>✅ 반려동물이 친숙함을 느낄 수 있도록 보호자가 부르는 호칭을 그대로 사용합니다.</p>
+                            <p>✅ 보호자가 기입한 반려동물 특성을 잘 기억하고 대하세요.</p>
+                        </div>
+                        <div class="manual-slide">
+                            <h3>2. 긍정적인 언어 사용</h3>
+                            <p>✅ 보호자와의 소통에서는 항상 정중하고 친절한 어투를 유지하세요.</p>
+                            <p>✅ 반려동물에게도 부드러운 목소리로 이야기하며 신뢰를 형성합니다.</p>
+                            <p>✅ 문제가 발생해도 차분하게 해결 방안을 먼저 제시하세요.</p>
+                        </div>
+                        <div class="manual-slide">
+                            <h3>3. 식사 및 간식 관리</h3>
+                            <p>✅ 보호자가 제공한 사료와 간식을 정해진 시간에 정확한 양만 급여하세요.</p>
+                            <p>✅ 금지 음식(초콜릿, 양파, 포도 등)이 반려동물에게 닿지 않도록 주의합니다.</p>
+                            <p>✅ 깨끗한 물을 항상 충분히 제공하세요.</p>
+                        </div>
+                        <div class="manual-slide">
+                            <h3>4. 산책 및 운동 시 주의사항</h3>
+                            <p>✅ 산책 전, 목줄이나 하네스가 안전하게 착용되었는지 확인하세요.</p>
+                            <p>✅ 자동차 도로, 계단, 낯선 동물이 있는 곳에서는 더욱 주의하세요.</p>
+                            <p>✅ 반려동물이 불안해하거나 지칠 경우 무리하지 않고 적절히 쉬어 주세요.</p>
+                        </div>
+                        <div class="manual-slide">
+                            <h3>5. 청결 유지 및 배변 관리</h3>
+                            <p>✅ 실내에서 배변을 해결하는 반려동물은 정해진 장소에서 볼일을 볼 수 있도록 유도하세요.</p>
+                            <p>✅ 실외 배변 시 반드시 배변 봉투를 사용해 깨끗이 처리하세요.</p>
+                            <p>✅ 털 빠짐이 심한 반려동물은 정기적으로 빗질하여 환경을 청결하게 유지하세요.</p>
+                        </div>
+                        <div class="manual-slide">
+                            <h3>6. 응급 상황 대처법</h3>
+                            <p>✅ 반려동물이 다치거나 아플 경우, 즉시 보호자에게 연락하세요.</p>
+                            <p>✅ 보호자가 연락되지 않을 경우, 사전에 안내받은 병원으로 신속히 이동하세요.</p>
+                            <p>✅ 호흡 곤란, 심한 구토, 경련 등의 응급 증상이 보이면 지체 없이 조치를 취하세요.</p>
+                        </div>
+                        <div class="manual-slide">
+                            <h3>7. 정리 및 마무리</h3>
+                            <p>✅ 돌봄이 끝난 후, 반려동물의 상태와 특이사항을 보호자에게 상세히 보고하세요.</p>
+                            <p>✅ 사용한 용품(밥그릇, 배변 패드, 장난감 등)은 깨끗이 정리하세요.</p>
+                            <p>✅ 보호자와 마지막 인사를 나누고, 필요한 피드백이 있으면 적극 반영하세요.</p>
+                        </div>
+                        <button class="prev" onclick="prevSlide()">❮</button>
+                        <button class="next" onclick="nextSlide()">❯</button>
+                    </div>
+                </section>
+
+
+                <!-- 이달 담당 지역 -->
+                <section class="region-section">
+                    <h2>이달 담당 지역</h2>
+                    <table>
+                        <tr><th>계양구</th><td style="text-align: left">김유지, 박이룸, 윤미래</td></tr>
+                        <tr><th>남동구</th><td style="text-align: left">지예미, 주안나</td></tr>
+                        <tr><th>동구</th><td style="text-align: left">최아라</td></tr>
+                        <tr><th>미추홀구</th><td style="text-align: left">신은주, 김주은</td></tr>
+                        <tr><th>부평구</th><td style="text-align: left">한윤제, 주빈, 윤서연</td></tr>
+                        <tr><th>서구</th><td style="text-align: left">이채연</td></tr>
+                        <tr><th>연수구</th><td style="text-align: left">김지선, 정은아</td></tr>
+                        <tr><th>중구</th><td style="text-align: left">성하연</td></tr>
+                    </table>
+                </section>
+
+                <!-- 이달의 우수 펫시터 -->
+                <section class="best-petsitter">
+                    <h2>이달의 우수 펫시터</h2>
+                    <div class="petsitter-card">
+                        <div class="petsitter-img"><img src="/images/sitter15.png" width="200" height="200"/> </div>
+                        <p style="font-size: 20px">김지선 펫시터</p>
+                        <p>⭐ 5.00</p>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+
+
+
+        <!-- 회원 신청 및 픽업 내역 -->
+        <div class="tab-content" id="tab1">
+            <h4>회원 목록</h4>
+            <table class="board-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>보호자명</th>
+                    <th>보호자 이메일</th>
+                    <th>보호자 주소</th>
+                </tr>
+                </thead>
+                <tbody id="userTableBody">
+
+                </tbody>
+            </table>
+        </div>
+
+
+    <!-- 콘텐츠 영역 -->
+
+        <!-- 회원 신청 및 픽업 내역 -->
+        <div class="tab-content" id="tab2">
+            <h4>전체 신청 및 픽업 내역</h4>
+
+            <!-- 가로 정렬을 위한 컨테이너 -->
+            <div class="table-container">
+                <table class="board-table">
+                    <thead>
+                    <tr>
+                        <th>신청글</th>
+                        <th>작성자</th>
+                        <th>예약날짜</th>
+                    </tr>
+                    </thead>
+                    <tbody id="written-post-list">
+                    <!-- JavaScript에서 데이터 추가 -->
+                    </tbody>
+                </table>
+
+                <table class="board-table">
+                    <thead>
+                    <tr>
+                        <th>픽업글</th>
+                        <th>코스확인</th>
+                    </tr>
+                    </thead>
+                    <tbody id="apply-list">
+                    <!-- JavaScript에서 데이터 추가 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- 돌봄 일지 내역 -->
+        <div class="tab-content" id="tab3">
+            <h4>돌봄 일지 내역</h4>
+            <table class="diary-table">
+                <thead>
+                <tr>
+                    <th>제목</th>
+                    <th>반려견 이름</th>
+                    <th>예약날짜</th>
+                    <th>일지작성</th>
+                </tr>
+                </thead>
+                <tbody>
+                <div class="diary-list">
+
+                </div>
+                <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", async function () {
+        try {
+            const response = await fetch("/users"); // API 요청
+            if (!response.ok) throw new Error("서버 응답 오류");
+
+            const users = await response.json(); // JSON 데이터 변환
+            let rows = users.map(user => `
+            <tr>
+                <td>${user.userId}</td>
+                <td>${user.userName}</td>
+                <td>${user.userPhone}</td>
+                <td>${user.userAddress}</td>
+            </tr>
+        `).join("");
+
+            document.getElementById("userTableBody").innerHTML = rows;
+        } catch (error) {
+            alert("회원 정보를 불러오는 데 실패했습니다.");
+            console.error(error);
+        }
+    });
+</script>
+<script th:inline="javascript">
+    window.onload = function () {
+        // 서버에서 받아온 세션 이미지 경로(상대 경로 유지)
+        var profileImageUrl = '[[${session.loginProfile}]]';  // 세션에서 파일명만 가져옴
+        if (profileImageUrl) {
+            // Thymeleaf에서 사용하는 경로와 일치시켜 웹에서 접근할 수 있는 경로로 변경
+            document.getElementById('preImage').src = '/images/Profile/' + profileImageUrl;
+        }
+    };
+    $('#User_Profile').on('change', function (event) {
+        let file = event.target.files[0];  // 선택한 파일
+        console.log(file);  // 파일 객체가 잘 읽혔는지 확인
+        if (file) {
+            let reader = new FileReader();  // FileReader 생성
+
+            reader.onload = function (e) {
+                console.log(e.target.result);  // 읽힌 파일의 URL을 콘솔로 출력하여 확인
+                $('#preImage').attr('src', e.target.result);  // 미리보기 이미지
+            };
+
+            // 파일을 Base64 데이터 URL로 변환
+            reader.readAsDataURL(file);  // FileReader가 Base64로 변환
+        } else {
+            console.log('파일이 선택되지 않았습니다');
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // 모든 탭 버튼과 탭 콘텐츠 가져오기
+        const tabButtons = document.querySelectorAll(".tab-button");
+        const tabContents = document.querySelectorAll(".tab-content");
+
+        // 각 탭 버튼에 클릭 이벤트 추가
+        tabButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                // 모든 버튼과 콘텐츠 초기화
+                tabButtons.forEach((btn) => btn.classList.remove("active"));
+                tabContents.forEach((content) => content.classList.remove("active"));
+
+                // 클릭한 버튼 활성화
+                button.classList.add("active");
+
+                // 클릭한 버튼의 data-tab 속성에 해당하는 콘텐츠 활성화
+                const tabId = button.getAttribute("data-tab");
+                document.getElementById(tabId).classList.add("active");
+            });
+        });
+    });
+
+    // 전체 신청 내역 불러오기
+    fetch('/getAllBoardLists')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('게시글 목록을 가져오는 데 실패했습니다.');
+            }
+            return response.json();
+        })
+        .then(boards => {
+            console.log(boards); // 받아온 데이터 확인
+            const postListBody = document.querySelector('#written-post-list'); // 게시글 목록이 들어갈 tbody 요소 선택
+            postListBody.innerHTML = ''; // 기존 목록 초기화
+
+            boards.forEach(board => {
+                const row = document.createElement('tr'); // 새로운 tr 요소 생성
+
+                // 제목 열
+                const titleCell = document.createElement('td');
+                const link = document.createElement('a');
+                link.href = `/boarddetail/${board.bnum}`; // 게시글 상세 페이지 링크
+                link.textContent = board.btitle;
+                titleCell.appendChild(link);
+                row.appendChild(titleCell);
+
+                // 작성자 열
+                const authorCell = document.createElement('td');
+                authorCell.textContent = board.userId; // 작성자 정보 추가
+                row.appendChild(authorCell);
+
+                // 예약 날짜 열
+                const dateCell = document.createElement('td');
+                const reservationDate = new Date(board.reservationDate); // 예약 날짜를 Date 객체로 변환
+                dateCell.textContent = reservationDate.toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                row.appendChild(dateCell);
+
+                // tbody에 추가
+                postListBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    // 전체 픽업 내역 불러오기
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/applyList')  // 수정된 API 경로
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('신청한 게시글 목록을 가져오는 데 실패했습니다.');
+                }
+                return response.json();
+            })
+            .then(applies => {
+                console.log(applies); // 받아온 데이터 확인
+                const appliedPostListBody = document.querySelector('#apply-list'); // tbody 요소 선택
+                appliedPostListBody.innerHTML = ''; // 기존 목록 초기화
+
+                applies.forEach(apply => {
+                    const row = document.createElement('tr'); // 새로운 tr 요소 생성
+
+                    // 제목 열
+                    const titleCell = document.createElement('td');
+                    const link = document.createElement('a');
+                    link.href = `/boarddetail/${apply.bnum}`; // 게시글 상세 페이지 링크
+                    link.textContent = apply.btitle; // 게시글 제목
+                    titleCell.appendChild(link);
+                    row.appendChild(titleCell);
+
+                    // 코스확인 열
+                    const courseCell = document.createElement('td');
+                    const courseButton = document.createElement('button');
+                    courseButton.textContent = '픽업 코스 확인';
+                    courseButton.onclick = () => {
+                        window.location.href = `/course?bNum=${apply.bnum}`;
+                    };
+                    courseCell.appendChild(courseButton);
+                    row.appendChild(courseCell);
+
+                    // tbody에 추가
+                    appliedPostListBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+
+    // 돌봄일지 내역 불러오기
+    fetch('/getAllBoardListsWithoutService5')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('게시글 목록을 가져오는 데 실패했습니다.');
+            }
+            return response.json();
+        })
+        .then(boards => {
+            console.log(boards); // 받아온 데이터 확인
+            const diaryListBody = document.querySelector('#tab3 .diary-table tbody'); // tbody 요소 선택
+            diaryListBody.innerHTML = ''; // 기존 목록 초기화
+
+            boards.forEach(board => {
+                const row = document.createElement('tr'); // 새로운 tr 요소 생성
+
+                // 제목 열
+                const titleCell = document.createElement('td');
+                const link = document.createElement('a');
+                link.href = `/boarddetail/${board.bnum}`; // 게시글 상세 페이지 링크
+                link.textContent = board.btitle; // 게시글 제목
+                titleCell.appendChild(link);
+                row.appendChild(titleCell);
+
+                // 반려견 이름 열 (petName을 가져와서 표시)
+                const petCell = document.createElement('td');
+                petCell.textContent = board.petName; // petName 출력
+                row.appendChild(petCell);
+
+                // 예약 날짜 열
+                const dateCell = document.createElement('td');
+                const reservationDate = new Date(board.reservationDate); // 예약 날짜를 Date 객체로 변환
+                dateCell.textContent = reservationDate.toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                row.appendChild(dateCell);
+
+                // 일지 작성 열
+                const diaryButtonCell = document.createElement('td');
+                const diaryButton = document.createElement('button');
+                diaryButton.textContent = '일지 작성';
+                diaryButton.onclick = function () {
+                    window.location.href = `/writeForm?bNum=${board.bnum}`; // 일지 작성 페이지로 이동
+                };
+                diaryButtonCell.appendChild(diaryButton);
+                row.appendChild(diaryButtonCell);
+
+                // tbody에 추가
+                diaryListBody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+    let currentSlide = 0;
+    const slides = document.querySelectorAll(".manual-slide");
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle("active", i === index);
+        });
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    let currentYear, currentMonth;
+    const calendarTitle = document.getElementById("calendar-title");
+    const calendarDays = document.getElementById("calendar-days");
+
+    // 🟢 미니 모달 생성
+    const miniModal = document.createElement("div");
+    miniModal.classList.add("mini-modal");
+    document.body.appendChild(miniModal);
+
+    // 예제 예약 데이터 (날짜: 예약 개수)
+    const reservations = {
+        "2025-02-10": 1,
+        "2025-02-15": 5,
+        "2025-02-18": 4,
+        "2025-02-22": 2,
+        "2025-02-01": 4,
+        "2025-02-02": 2,
+        "2025-02-17": 1,
+        "2025-02-27": 3,
+        "2025-02-28": 6
+    };
+
+    function generateCalendar(year, month) {
+        calendarDays.innerHTML = ""; // 기존 달력 초기화
+
+        const firstDay = new Date(year, month, 1).getDay(); // 해당 월 1일의 요일
+        const lastDate = new Date(year, month + 1, 0).getDate(); // 마지막 날짜
+
+        calendarTitle.textContent = `${year}년 ${month + 1}월`;
+
+        // 빈 칸 추가 (1일이 시작하는 요일까지)
+        for (let i = 0; i < firstDay; i++) {
+            const emptyCell = document.createElement("div");
+            emptyCell.classList.add("empty");
+            calendarDays.appendChild(emptyCell);
+        }
+
+        // 날짜 채우기
+        for (let day = 1; day <= lastDate; day++) {
+            const dateCell = document.createElement("div");
+            dateCell.textContent = day;
+            dateCell.classList.add("day");
+
+            const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            if (reservations[dateKey]) {
+                const count = reservations[dateKey];
+                dateCell.setAttribute("data-schedule", count);
+                dateCell.classList.add("has-reservation"); // 예약이 있는 날짜 스타일 적용
+
+                // 🟢 마우스 호버 이벤트 추가
+                dateCell.addEventListener("mouseenter", (event) => {
+                    miniModal.textContent = `예약 ${count}건`;
+                    miniModal.style.display = "block";
+                });
+
+                dateCell.addEventListener("mousemove", (event) => {
+                    miniModal.style.left = event.pageX + 10 + "px";
+                    miniModal.style.top = event.pageY + 10 + "px";
+                });
+
+                dateCell.addEventListener("mouseleave", () => {
+                    miniModal.style.display = "none";
+                });
+            }
+
+            calendarDays.appendChild(dateCell);
+        }
+    }
+
+    function changeMonth(step) {
+        currentMonth += step;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        } else if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        generateCalendar(currentYear, currentMonth);
+    }
+
+    // 초기 설정 (현재 날짜 기준)
+    document.addEventListener("DOMContentLoaded", () => {
+        const today = new Date();
+        currentYear = today.getFullYear();
+        currentMonth = today.getMonth();
+        generateCalendar(currentYear, currentMonth);
+    });
+
+
+</script>
+
+
+</body>
+</html>

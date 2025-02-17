@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>KeePet - Premium Pet Sitter</title>
+
+    <link href="/css/myPage.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="main-container">
+    <!-- 사이드바 -->
+    <div class="sidebar">
+        <div id="logo"><a href="/"><img src="/images/logo.png" width="110" height="50" alt="logo"></a></div>
+        <div class="profile-image" id="pImage">
+            <img alt="프로필 사진" th:src="@{/profile/{loginProfile}(loginProfile=${session.loginProfile})}">
+        </div>
+        <br>
+        <button class="tab-button active" data-tab="tab1">내 정보</button>
+        <button class="tab-button" data-tab="tab2" id="petTab">마이펫 정보</button>
+        <button class="tab-button" data-tab="tab3">내 신청 내역</button>
+        <button class="tab-button" data-tab="tab4">내 리뷰</button>
+        <button class="tab-button" data-tab="tab5">킵펫 돌봄 일지</button>
+    </div>
+
+    <!-- 콘텐츠 영역 -->
+    <div class="content-area">
+        <!-- 내 정보 -->
+        <div class="tab-content active" id="tab1">
+            <div class="profile-container">
+                <h2>내 정보</h2>
+                <div class="personal-info-area">
+                    <div class="profile-details">
+                        <p>이름: <span th:text="${session.loginName}"></span></p>
+                        <p>닉네임: <span th:text="${session.loginNickname}"></span></p>
+                        <p>생년월일: <span th:text="${session.loginBirth}"></span></p>
+                        <p>이메일: <span th:text="${session.loginEmail}"></span></p>
+                        <p>연락처: <span th:text="${session.loginPhone}"></span></p>
+                        <p>주소: <span th:text="${session.loginAddress}"></span></p>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="editProfileBtn">수정</button>
+                        <button id="deleteUserBtn">탈퇴</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay" style="display: none;"></div>
+        <div class="modal" id="modifyModal" style="display: none; width: 500px; height: 800px">
+            <div class="modal-content">
+                <span class="close-btn" id="closeModifyModal">×</span>
+                <div class="modal-body">
+                    <h2>회원 정보 수정</h2>
+                    <form action="/mdJoin" enctype="multipart/form-data" method="post" name="mJoinForm" id="modifyForm" style="height: 80%; margin: 50px 0;">
+                        <table style="margin: auto 0; border: none; gap: 30px;" id="modifyTable">
+                            <tr>
+                                <th>아이디</th>
+                                <td>
+                                    <input id="User_Id" name="UserId" readonly th:value="${session.loginId}" style="border: none;"
+                                           type="text"/>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>비밀번호</th>
+                                <td>
+                                    <input id="User_Pw" name="UserPw" placeholder="비밀번호" type="password"/>
+                                    <p id="check2"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>비밀번호 확인</th>
+                                <td>
+                                    <input id="checkPw" placeholder="비밀번호 확인" type="password"/>
+                                    <p id="check3"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>생년월일</th>
+                                <td th:text="${session.loginBirth}"></td>
+                                <td><input id="User_Birth" name="UserBirth" placeholder="생년월일"
+                                           th:value="${session.loginBirth}"
+                                           type="hidden"/></td>
+                            </tr>
+                            <tr>
+                                <th>이메일</th>
+                                <td>
+                                    <input id="User_Email" name="UserEmail" placeholder="이메일"
+                                           th:value="${session.loginEmail}"
+                                           type="email"/>
+                                    <span id="check4">
+                            <input id="checkEmail" type="button" value="인증"/>
+                        </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>연락처</th>
+                                <td>
+                                    <input id="User_Phone" name="UserPhone" placeholder="연락처"
+                                           th:value="${session.loginPhone}"
+                                           type="text"/>
+                                    <span id="check5">
+                            <input id="checkPhone" type="button" value="인증"/>
+                        </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>주소</th>
+                                <td>
+                                    <input onclick="sample6_execDaumPostcode_modal()" type="button" value="우편번호 찾기"><br>
+                                    <input id="modal_sample6_address" placeholder="주소"
+                                           th:value="${session.loginAddress}"
+                                           type="text"><br>
+                                    <!--                            <input id="modal_sample6_detailAddress" placeholder="상세주소" type="text">-->
+                                    <input id="User_Address" name="UserAddress" type="hidden"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>이름</th>
+                                <td><input name="UserName" placeholder="이름" th:value="${session.loginName}"
+                                           type="text"/></td>
+                            </tr>
+                            <tr>
+                                <th>닉네임</th>
+                                <td><input name="UserNickname" placeholder="닉네임" th:value="${session.loginNickname}"
+                                           type="text"/></td>
+                            </tr>
+                            <tr>
+                                <th>프로필사진</th>
+                                <td><input id="User_Profile" name="UserProfile" type="file"/>
+                                    <br/><img id="preImage"
+                                              th:src="@{/Profile/${session.loginProfile ?: 'default.png'}}"
+                                              width="100px"/></td>
+                            </tr>
+                        </table>
+                        <div class="edit-profile-actions">
+                            <button id="modalSaveBtn" type="submit">수정</button>
+                            <button id="modalCancelBtn" type="button">취소</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 내 반려견 정보 -->
+        <div class="tab-content" id="tab2">
+            <div class="profile-container">
+                <h2>내 반려견 정보</h2>
+                <div id="petInfo">
+
+                </div>
+            </div>
+        </div>
+
+        <!-- 내 신청 내역 -->
+        <div class="tab-content" id="tab3">
+            <h4>내 신청 내역</h4>
+
+            <!-- 가로 정렬을 위한 컨테이너 -->
+            <div class="table-container">
+                <!-- 첫 번째 테이블 -->
+                <table class="board-table">
+                    <thead>
+                    <tr>
+                        <th>신청글</th>
+                        <th>예약날짜</th>
+                        <th>리뷰작성</th>
+                    </tr>
+                    </thead>
+                    <tbody id="written-post-list">
+                    <!-- JavaScript에서 데이터 추가 -->
+                    </tbody>
+                </table>
+
+                <!-- 두 번째 테이블 -->
+                <table class="board-table">
+                    <thead>
+                    <tr>
+                        <th>픽업글</th>
+                        <th>코스확인</th>
+                    </tr>
+                    </thead>
+                    <tbody id="apply-list">
+                    <!-- JavaScript에서 데이터 추가 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- 리뷰 작성 모달 -->
+        <div class="modal" id="reviewModal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-btn" id="closeModal">&times;</span>
+                <h3>리뷰 작성</h3>
+                <form action="/RWrite" enctype="multipart/form-data" id="reviewForm" method="post"
+                      name="RWriteForm">
+                    <!--                    <input type="hidden" name="BNum" th:value="${bNum}"/>-->
+                    <!--                    <input type="hidden" name="UserId" th:value="${session.loginId}"/>-->
+                    <input id="BNum" name="BNum" type="hidden" value=""/>
+                    <input id="UserId" name="UserId" type="hidden" value=""/>
+
+                    <div>
+                        <label for="revContents">리뷰 내용:</label>
+                        <textarea id="revContents" name="RevContents" required rows="4"></textarea>
+                    </div>
+                    <div>
+                        <label for="ratingStars">별점:</label>
+                        <div class="stars" id="ratingStars">
+                            <i class="fa fa-star" data-value="1"></i>
+                            <i class="fa fa-star" data-value="2"></i>
+                            <i class="fa fa-star" data-value="3"></i>
+                            <i class="fa fa-star" data-value="4"></i>
+                            <i class="fa fa-star" data-value="5"></i>
+                        </div>
+                        <input id="ratingValue" name="Rating" type="hidden" value="0"/>
+                    </div>
+                    <div>
+                        <label for="revFile">후기 파일 첨부:</label>
+                        <input id="revFile" name="revFile"type="file"/>
+                        <br/> <img id="revImage" width="150px"/>
+                    </div>
+                    <div>
+                        <button type="submit">작성완료</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 내 리뷰 -->
+        <div class="tab-content" id="tab4">
+            <h4>내 리뷰</h4>
+            <table class="review-table">
+                <thead>
+                <tr>
+                    <th>신청글 제목</th>
+                    <th>내용</th>
+                    <th>별점</th>
+                    <th>신청글 보기</th>
+                </tr>
+                </thead>
+                <tbody id="myreview-list">
+
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 킵펫 돌봄 일지 -->
+        <div class="tab-content" id="tab5">
+            <h4>킵펫 돌봄 일지</h4>
+            <input type="hidden" id="userIdcheck" th:value="${session.loginId}" />
+
+            <div id="diary-list"></div>
+        </div>
+
+        <div class="modal-overlay" id="modalOverlay" style="display: none;"></div>
+
+        <!-- 돌봄 일지 모달 -->
+        <div id="careDiaryModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-btn" id="closeDiaryyModal">×</span>
+                <h4 id="modal-title"></h4>
+
+                <div class="modal-body">
+                    <input type="hidden" id="userIdcheck1" th:value="${session.loginId}" />
+                    <div class="modal-scroll"> <!-- 스크롤이 필요한 부분을 감싸는 div 추가 -->
+                        <table class="diary-table">
+                            <tbody class="care-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+        <script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script th:inline="javascript">
+    window.onload = function () {
+        // 서버에서 받아온 세션 이미지 경로(상대 경로 유지)
+        var profileImageUrl = '[[${session.loginProfile}]]';  // 세션에서 파일명만 가져옴
+        if (profileImageUrl) {
+            // Thymeleaf에서 사용하는 경로와 일치시켜 웹에서 접근할 수 있는 경로로 변경
+            document.getElementById('preImage').src = '/images/Profile/' + profileImageUrl;
+        }
+    };
+    $('#User_Profile').on('change', function (event) {
+        let file = event.target.files[0];  // 선택한 파일
+        console.log(file);  // 파일 객체가 잘 읽혔는지 확인
+        if (file) {
+            let reader = new FileReader();  // FileReader 생성
+
+            reader.onload = function (e) {
+                console.log(e.target.result);  // 읽힌 파일의 URL을 콘솔로 출력하여 확인
+                $('#preImage').attr('src', e.target.result);  // 미리보기 이미지
+            };
+
+            // 파일을 Base64 데이터 URL로 변환
+            reader.readAsDataURL(file);  // FileReader가 Base64로 변환
+        } else {
+            console.log('파일이 선택되지 않았습니다');
+        }
+    });
+
+    // 회원탈퇴 버튼 클릭 시
+    document.getElementById('deleteUserBtn').addEventListener('click', function() {
+        // 사용자가 탈퇴를 확실히 하길 원한다면 확인창을 띄울 수 있습니다.
+        const confirmDelete = confirm('정말로 회원탈퇴를 하시겠습니까?');
+
+        // 사용자가 '확인'을 눌렀을 때만 탈퇴 페이지로 이동
+        if (confirmDelete) {
+            // '/deleteUser' 페이지로 이동
+            window.location.href = '/deleteUser';
+        }
+    });
+
+
+    // 수정 폼 JavaScript
+    const editProfileForm = document.querySelector('.edit-profile-form');
+    const editProfileBtn = document.getElementById('editProfileBtn');
+    const personalInfoArea = document.querySelector('.personal-info-area');
+    const sidebar = document.querySelector('.sidebar');
+    const tab1Content = document.getElementById('tab1'); // "내 정보 내역" 탭 내용
+    const modalCancelBtn = document.getElementById('modalCancelBtn');
+    const modalSaveBtn = document.getElementById('modalSaveBtn');
+
+    editProfileBtn.onclick = function () {
+        // 수정 폼 보이기
+        personalInfoArea.classList.add('hidden');
+        sidebar.classList.add('hidden');
+        tab1Content.classList.add('hidden');
+        editProfileForm.classList.remove('hidden');
+    }
+
+    modalCancelBtn.onclick = function () {
+        // 수정 폼 숨기기, 원래 화면 보이기
+        editProfileForm.classList.add('hidden');
+        personalInfoArea.classList.remove('hidden');
+        sidebar.classList.remove('hidden');
+        tab1Content.classList.remove('hidden');
+    }
+
+    modalSaveBtn.onclick = function () {
+        // 여기에 저장 로직을 구현하세요
+        alert("수정 완료되었습니다!"); // 예시
+        editProfileForm.classList.add('hidden');
+        personalInfoArea.classList.remove('hidden');
+        sidebar.classList.remove('hidden');
+        tab1Content.classList.remove('hidden');
+    }
+
+
+
+    // 프로필 이미지 미리보기 (Modal 내부 -> 폼 내부)
+    document.querySelector('#User_Profile').onchange = function (event) {
+        let file = event.target.files[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                document.querySelector('#preImage').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    };
+
+    // 다음 주소 API (Modal 내부 -> 폼 내부)
+    function sample6_execDaumPostcode_modal() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                var addr = '';
+                if (data.userSelectedType === 'R') {
+                    addr = data.roadAddress;
+                } else {
+                    addr = data.jibunAddress;
+                }
+
+                // 도로명 주소에 "인천"이 포함되어 있는지 체크
+                if (addr.indexOf("인천") === -1) {
+                    alert("인천에 해당하는 주소만 검색할 수 있습니다.");
+                    return; // "인천"이 포함되지 않은 주소는 검색 종료
+                }
+
+                document.querySelector('#modal_sample6_address').value = addr;
+                // document.querySelector('#modal_sample6_detailAddress').focus();
+                console.log("선택된 주소:", addr);
+            }
+        }).open();
+    }
+
+    // 주소 합치기 및 Form 제출 (Modal 내부 -> 폼 내부)
+    document.querySelector('#modalSaveBtn').onclick = function () {
+        let user_Address = document.querySelector('#User_Address');
+        let addr1 = document.querySelector('#modal_sample6_address').value;
+        console.log("주소 값:", addr1);  // addr1 값 확인
+        // let addr2 = document.querySelector('#modal_sample6_detailAddress').value;
+
+        user_Address.value = `${addr1}`;
+
+        // 간단한 유효성 검사 (추가적인 검증 로직 필요)
+        if (!document.querySelector('#User_Pw').value || !document.querySelector('#checkPw').value || !document.querySelector('#User_Email').value || !document.querySelector('#User_Phone').value) {
+            alert('필수 정보를 입력해주세요.');
+            return;
+        }
+
+        document.querySelector('form[name="mJoinForm"]').submit();
+        alert('수정 완료! 회원 정보 업데이트를 위해 다시 로그인 해주세요.');
+    };
+
+
+    let user_Pw = $('#User_Pw');
+    let check2 = $('#check2');
+    let check_pw1 = false;
+
+    user_Pw.keyup(() => {
+        let pwVal = user_Pw.val();
+        let num = pwVal.search(/[0-9]/);
+        let eng = pwVal.search(/[a-z]/);
+        let eng1 = pwVal.search(/[A-Z]/);
+        let spe = pwVal.search(/[~!@#$%^&*]/);
+        let spc = pwVal.search(/\s/);
+        let checked = pwVal.search(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*])[\S]{8,16}$/);
+
+        if (pwVal.length < 8 || pwVal.length > 16) {
+            check2.html('8-16자리 입력!');
+            check2.css('color', 'red');
+            check_pw1 = false;
+        } else if (spc != -1) {
+            check2.html('공백없이 입력!');
+            check2.css('color', 'red');
+            check_pw1 = false;
+        } else if (num == -1 || eng == -1 || eng1 == -1 || spe == -1) {
+            check2.html('숫자, 특수문자, 대소문자 혼합 입력!');
+            check2.css('color', 'red');
+            check_pw1 = false;
+        } else {
+            check2.html('사용가능한 비밀번호!');
+            check2.css('color', 'blue');
+            check_pw1 = true;
+        }
+    });
+
+    let checkPw = $('#checkPw');
+    let check3 = $('#check3');
+    let check_pw2 = false;
+
+    checkPw.keyup(() => {
+        pwVal = user_Pw.val();
+        let checkVal = checkPw.val();
+
+        if (pwVal == checkVal) {
+            check3.html(`비밀번호 일치`);
+            check3.css('color', 'blue');
+            check_pw2 = true;
+        } else {
+            check3.html(`비밀번호 불일치`);
+            check3.css('color', 'red');
+            check_pw2 = false;
+        }
+    });
+
+    let checkEmail = $('#checkEmail');
+    let user_Email = $('#User_Email');
+    let check4 = $('#check4');
+    let check_email = false;
+
+    checkEmail.click(() => {
+        $.ajax({
+            type: "POST",
+            url: "/emailCheck",
+            data: {"UserEmail": user_Email.val()},
+            dataType: "text",
+            success: (uuid) => {
+                console.log(uuid);
+                check4.empty();
+                check4.append(`<br/><input type="text" id="uuid1" />`);
+                check4.append(` <input type="button" value="인증" id="btnUUID" data-value="${uuid}" />`);
+            },
+            error: () => {
+                alert('emailCheck 통신 실패');
+            }
+        });
+    });
+
+    $(document).on('click', '#btnUUID', function () {
+        let uuid = $(this).data("value");
+        let uuid1 = $('#uuid1').val();
+
+        if (uuid == uuid1) {
+            alert('이메일 인증 성공');
+            check4.hide();
+            user_Email.attr('readonly', true);
+            check_email = true;
+        } else {
+            alert('이메일 인증번호를 확인해주세요');
+            $('#uuid1').val("");
+            check_email = false;
+        }
+    });
+
+    let check_phone = false;
+
+    $(document).on('click', '#checkPhone', function () {
+        var phone = $('#User_Phone').val();
+
+        if (phone === "") {
+            alert("연락처를 입력해주세요.");
+            return;
+        } else {
+            alert("입력하신 폰 번호는 : " + phone + "입니다.");
+        }
+
+        $.ajax({
+            url: '/PhoneCheck',
+            method: 'POST',
+            data: {"UserPhone": phone},
+            dataType: "text",
+            success: function (response) {
+                console.log("연락처:", phone, "인증번호:", response);
+                var check5 = $('#check5');
+                check5.empty();
+                check5.append(`<br/><input type="text" id="uuid" />`);
+                check5.append(` <input type="button" value="인증" id="BtnPhone" data-value="${response}" />`);
+                check_phone = true;
+            },
+            error: function (error) {
+                alert('인증번호를 생성하는데 실패했습니다. 다시 시도해주세요.');
+            }
+        });
+    });
+
+    $(document).on('click', '#BtnPhone', function () {
+        if (!check_phone) {
+            alert("먼저 인증번호 발송을 클릭해주세요.");
+            return;
+        }
+
+        let btnPhone = $('#uuid').val();
+        let btnPhone1 = $(this).data("value");
+
+        if (btnPhone === btnPhone1) {
+            alert('연락처 인증 성공');
+            $('#check5').hide();
+            $('#User_Phone').attr('readonly', true);
+        } else {
+            alert('인증번호를 확인해주세요');
+            $('#uuid').val("");
+        }
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // 모든 탭 버튼과 탭 콘텐츠 가져오기
+        const tabButtons = document.querySelectorAll(".tab-button");
+        const tabContents = document.querySelectorAll(".tab-content");
+
+        // 수정 모달 관련 코드
+        const modifyModal = document.getElementById("modifyModal");
+        const modalOverlay = document.querySelector('.modal-overlay');
+        const modalCancelButton = document.getElementById("modalCancelBtn");
+
+        // '수정' 버튼 클릭 이벤트
+        document.getElementById("editProfileBtn").onclick = function(event) {
+            event.preventDefault(); // 페이지 새로 고침 방지
+
+            // 모달을 열고
+            modifyModal.style.display = "block";
+            modalOverlay.style.display = 'block'; // 오버레이도 열기
+        };
+
+        // 수정 모달 x 버튼 클릭 시 모달 닫기
+        document.getElementById("closeModifyModal").onclick = function() {
+            modifyModal.style.display = "none";  // 모달 닫기
+            modalOverlay.style.display = 'none';  // 오버레이 닫기
+        };
+
+        // 수정 모달 취소 버튼 클릭 시
+        modalCancelButton.onclick = function() {
+            modifyModal.style.display = "none";  // 모달 닫기
+            modalOverlay.style.display = 'none'; // 오버레이 닫기
+        };
+
+        // 각 탭 버튼에 클릭 이벤트 추가
+        tabButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                // 모든 버튼과 콘텐츠 초기화
+                tabButtons.forEach((btn) => btn.classList.remove("active"));
+                tabContents.forEach((content) => content.classList.remove("active"));
+
+                // 클릭한 버튼 활성화
+                button.classList.add("active");
+
+                // 클릭한 버튼의 data-tab 속성에 해당하는 콘텐츠 활성화
+                const tabId = button.getAttribute("data-tab");
+                document.getElementById(tabId).classList.add("active");
+            });
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // 1️⃣ 신청한 게시글 목록 불러오기
+        fetch('/myapplyList', { credentials: 'same-origin' })  // 쿠키(세션) 포함
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('신청한 게시글 목록을 가져오는 데 실패했습니다.');
+                }
+                return response.json();
+            })
+            .then(applies => {
+                console.log(applies); // 받아온 데이터 확인
+                const appliedPostList = document.querySelector('#apply-list');
+                appliedPostList.innerHTML = ''; // 기존 목록 초기화
+
+                // 신청 내역이 없을 경우 메시지 출력
+                if (applies.length === 0) {
+                    const noDataMessage = document.createElement('tr');
+                    noDataMessage.innerHTML = '<td colspan="2">신청 내역이 없습니다.</td>';
+                    appliedPostList.appendChild(noDataMessage);
+                    return;
+                }
+
+                // 신청 내역이 있을 경우 각 항목을 표에 추가
+                applies.forEach(apply => {
+                    const row = document.createElement('tr');
+
+                    // 제목 (게시글 상세 페이지로 이동)
+                    const titleCell = document.createElement('td');
+                    const link = document.createElement('a');
+                    link.href = `/boarddetail/${apply.bnum}`;
+                    link.textContent = apply.btitle;
+                    titleCell.appendChild(link);
+                    row.appendChild(titleCell);
+
+                    // 코스 확인 버튼
+                    const courseCell = document.createElement('td');
+                    const courseButton = document.createElement('button');
+                    courseButton.textContent = '픽업 코스 확인';
+                    courseButton.onclick = () => {
+                        window.location.href = `/course?bNum=${apply.bnum}`;
+                    };
+                    courseCell.appendChild(courseButton);
+                    row.appendChild(courseCell);
+
+                    appliedPostList.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('신청한 게시글을 가져오는 중 오류 발생:', error);
+            });
+
+        // 2️⃣ 작성한 신청글 불러오기
+        fetch('/myboardList')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('작성한 신청글 목록을 가져오는 데 실패했습니다.');
+                }
+                return response.json();
+            })
+            .then(boards => {
+                const writtenPostList = document.querySelector('#written-post-list');
+                writtenPostList.innerHTML = ''; // 기존 목록 초기화
+
+                // 작성한 신청글이 없을 경우 메시지 출력
+                if (boards.length === 0) {
+                    const noDataMessage = document.createElement('tr');
+                    noDataMessage.innerHTML = '<td colspan="3">작성한 신청글이 없습니다.</td>';
+                    writtenPostList.appendChild(noDataMessage);
+                    return;
+                }
+
+                boards.forEach(board => {
+                    console.log("보드 데이터:", board);
+
+                    const row = document.createElement('tr');
+
+                    // 제목 (게시글 상세 페이지로 이동)
+                    const titleCell = document.createElement('td');
+                    const link = document.createElement('a');
+                    link.href = `/boarddetail/${board.bnum}`;
+                    link.textContent = board.btitle;
+                    titleCell.appendChild(link);
+                    row.appendChild(titleCell);
+
+                    // 작성일 (날짜 포맷 변환)
+                    const dateCell = document.createElement('td');
+                    const bdate = new Date(board.reservationDate);
+                    dateCell.textContent = bdate.toLocaleDateString('ko-KR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    row.appendChild(dateCell);
+
+                    // 리뷰 쓰기 버튼
+                    const reviewCell = document.createElement('td');
+                    const reviewButton = document.createElement('button');
+                    reviewButton.setAttribute('data-bnum', board.bnum);
+
+                    if (board.rstatus === 1) {
+                        reviewButton.textContent = '리뷰 완료';
+                        reviewButton.disabled = true;
+                    } else {
+                        reviewButton.textContent = '리뷰 쓰기';
+                        reviewButton.onclick = function () {
+                            openReviewModal(board.bnum, board.rstatus);
+                        };
+                    }
+
+                    reviewCell.appendChild(reviewButton);
+                    row.appendChild(reviewCell);
+
+                    writtenPostList.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('작성한 신청글을 가져오는 중 오류 발생:', error);
+            });
+    });
+
+    // 모달 열기 함수
+    function openReviewModal(bNum, rStatus) {
+        if (rStatus === 1) {
+            alert("이미 리뷰를 작성했습니다.");
+            return;
+        }
+
+        const modal = document.getElementById('reviewModal');
+
+        // BNum을 숨겨진 input에 설정
+        document.getElementById('BNum').value = bNum;
+
+        // session에서 로그인된 사용자 ID 가져오기
+        fetch('/getSessionUserId')
+            .then(response => response.json())
+            .then(data => {
+                const loginId = data.loginId;  // 로그인된 사용자 ID
+
+                // UserId를 숨겨진 input에 설정
+                document.getElementById('UserId').value = loginId;
+
+                modal.style.display = 'block';  // 모달 열기
+            })
+            .catch(error => {
+                console.error('로그인된 사용자 정보를 가져오는 데 오류 발생:', error);
+            });
+    }
+
+
+    // // 작성한 신청글 불러오기
+    // fetch('/myboardList')
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error('신청내역 목록을 가져오는 데 실패했습니다.');
+    //         }
+    //         return response.json(); // response.json()으로 변경: 응답 body를 JSON으로 파싱
+    //     })
+    //     .then(boards => {
+    //         const writtenPostList = document.querySelector('#written-post-list');
+    //         writtenPostList.innerHTML = ''; // 기존 목록 초기화 (새로운 데이터 로딩 전에)
+    //
+    //         if (boards.length === 0) {
+    //             const noDataMessage = document.createElement('tr');
+    //             noDataMessage.classList.add('no-data-message');
+    //             noDataMessage.innerHTML = '<td colspan="3">신청 내역이 없습니다.</td>';
+    //             writtenPostList.appendChild(noDataMessage);
+    //             return;
+    //         }
+    //
+    //         boards.forEach(board => {
+    //             console.log("보드 배열확인:", board) // 수정: 좀 더 명확하게 로그를 찍기 위해 변경
+    //             // alert(board) // alert는 사용자 경험을 해치므로 제거하거나 필요시 주석처리
+    //             const row = document.createElement('tr');
+    //
+    //             const titleCell = document.createElement('td');
+    //             const link = document.createElement('a');
+    //             link.href = `/boarddetail/${board.bnum}`;
+    //             link.textContent = board.btitle;
+    //             titleCell.appendChild(link);
+    //             row.appendChild(titleCell);
+    //
+    //             const dateCell = document.createElement('td');
+    //             const bdate = new Date(board.bdate);
+    //             const formattedDate = bdate.toLocaleDateString('ko-KR', { // 좀 더 명확한 날짜 형식 지정
+    //                 year: 'numeric',
+    //                 month: 'long',
+    //                 day: 'numeric'
+    //             });
+    //             dateCell.textContent = formattedDate;
+    //             row.appendChild(dateCell);
+    //
+    //             // 리뷰쓰기 버튼
+    //             const reviewCell = document.createElement('td');
+    //             const reviewLink = document.createElement('button');
+    //             reviewLink.setAttribute('data-bnum', board.bnum); // data-bnum 속성 추가
+    //
+    //             // rStatus 값에 따라 버튼 텍스트 및 동작 설정
+    //             if (board.rstatus === 1) {
+    //                 reviewLink.textContent = '리뷰완료';
+    //                 reviewLink.disabled = true;
+    //             } else {
+    //                 reviewLink.textContent = '리뷰쓰기';
+    //                 reviewLink.onclick = function () {
+    //                     openReviewModal(board.bnum, board.rstatus); // rStatus 값도 함께 전달
+    //                 };
+    //             }
+    //
+    //             reviewCell.appendChild(reviewLink);
+    //             row.appendChild(reviewCell);
+    //
+    //             writtenPostList.appendChild(row);
+    //         });
+    //
+    //     })
+    //     .catch(error => { // 에러 핸들링 추가: fetch 실패 시
+    //         console.error('신청내역 목록을 가져오는 중 오류 발생:', error);
+    //         // alert('신청내역을 가져오는 데 실패했습니다. 다시 시도해주세요.'); // 사용자에게 알림
+    //     });
+
+    // 모달 열기 함수
+    function openReviewModal(bNum, rStatus) {
+        if (rStatus === 1) {
+            alert("이미 리뷰를 작성했습니다.");
+            return;
+        }
+
+        const modal = document.getElementById('reviewModal');
+
+        // BNum을 숨겨진 input에 설정
+        document.getElementById('BNum').value = bNum;
+
+        // session에서 로그인된 사용자 ID 가져오기
+        fetch('/getSessionUserId')
+            .then(response => response.json())
+            .then(data => {
+                const loginId = data.loginId;  // 로그인된 사용자 ID
+
+                // UserId를 숨겨진 input에 설정
+                document.getElementById('UserId').value = loginId;
+
+                modal.style.display = 'block';  // 모달 열기
+            })
+            .catch(error => {
+                console.error('로그인된 사용자 정보를 가져오는 데 오류 발생:', error);
+            });
+    }
+
+    // 모달 닫기
+    document.getElementById('closeModal').addEventListener('click', function () {
+        const modal = document.getElementById('reviewModal');
+        modal.style.display = 'none';  // 모달 닫기
+    });
+
+    // 모달 외부 클릭 시 닫기
+    window.addEventListener('click', function (event) {
+        const modal = document.getElementById('reviewModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // 별점 클릭 시 이벤트 처리
+    $(document).ready(function () {
+        $('.stars i').on('click', function () {
+            var value = $(this).data('value');
+            $('#ratingValue').val(value);
+
+            // 선택된 별점까지 황금색으로 변경
+            $('.stars i').removeClass('active');
+            for (var i = 0; i < value; i++) {
+                $('.stars i').eq(i).addClass('active');
+            }
+        });
+    });
+
+    // 파일 첨부 후 미리보기
+    document.getElementById('revFile').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('revImage');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';  // 이미지 미리보기 보이기
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = 'none';  // 파일이 없으면 미리보기 숨기기
+        }
+    });
+
+    // 리뷰 제출 시
+    document.getElementById('reviewForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // 기본 제출 동작을 막음
+
+        const revContents = document.getElementById('revContents').value;
+        const ratingValue = document.getElementById('ratingValue').value;
+        const bNum = document.getElementById('BNum').value; // BNum을 숨겨진 input에서 가져옴
+        const userId = document.getElementById('UserId').value; // UserId를 숨겨진 input에서 가져옴
+
+        console.log(ratingValue);
+
+        if (ratingValue === "0") {
+            alert("별점을 선택해주세요!");
+            return;
+        }
+
+        const fileInput = document.getElementById('revFile');
+        const formData = new FormData();
+
+        if (fileInput.files.length > 0) {
+            formData.append('revFile', fileInput.files[0]);
+        }
+
+        // formData의 내용을 콘솔에 출력 (파일 추가 확인용)
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+        // 리뷰 내용과 별점 추가
+        formData.append('bNum', bNum);
+        formData.append('revContents', revContents);
+        formData.append('Rating', ratingValue); // 여기를 'Rating'으로 수정
+        formData.append('userId', userId);  // UserId 추가
+
+        fetch('http://localhost:9091/RWrite', {
+            method: 'POST',
+            body: new FormData(document.getElementById('reviewForm'))  // 폼 데이터 전송
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`서버 오류: ${response.status}`);
+                }
+                return response.json();  // JSON 응답 변환
+            })
+            .then(data => {
+                console.log('서버 응답:', data);  // 서버 응답 콘솔 출력
+
+                if (data.success) {
+                    alert('리뷰가 성공적으로 제출되었습니다!');
+
+                    // "리뷰쓰기" 버튼을 "작성완료" 버튼으로 변경하고 비활성화
+                    const bNum = document.getElementById('BNum').value;  // BNum 가져오기
+                    const reviewButton = document.querySelector(`button[data-bnum='${bNum}']`);
+                    if (reviewButton) {
+                        reviewButton.textContent = '리뷰완료';
+                        reviewButton.disabled = true;
+                    }
+
+                    // 모달 닫기
+                    closeModal();
+                } else {
+                    alert('리뷰 제출에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('리뷰 제출 중 오류 발생:', error);
+                alert('서버에 문제가 발생했습니다.');
+            });
+
+        // ✅ 모달을 닫는 함수
+        function closeModal() {
+            const modal = document.getElementById('reviewModal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.getElementById('reviewForm').reset(); // 폼 초기화
+            }
+        }
+
+    });
+
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     fetch('/myapplyList', { credentials: 'same-origin' })  // 쿠키(세션) 포함
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('신청한 게시글 목록을 가져오는 데 실패했습니다.');
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(applies => {
+    //             console.log(applies); // 받아온 데이터 확인
+    //             const appliedPostList = document.querySelector('#apply-list');
+    //             if (appliedPostList) {
+    //                 // 만약 신청 내역이 없으면 "신청 내역이 없습니다." 메시지 출력
+    //                 if (applies.length === 0) {
+    //                     const noDataMessage = document.createElement('div');
+    //                     noDataMessage.classList.add('no-data-message');
+    //                     noDataMessage.textContent = '신청 내역이 없습니다.';
+    //                     appliedPostList.appendChild(noDataMessage);
+    //                     return;
+    //                 }
+    //
+    //                 // 신청 내역이 있을 경우 각 항목 추가
+    //                 applies.forEach(apply => {
+    //                     const contentItem = document.createElement('div');
+    //                     contentItem.classList.add('content-item');
+    //
+    //                     const link = document.createElement('a');
+    //                     link.href = `/boarddetail/${apply.bnum}`;
+    //                     link.textContent = ` ${apply.btitle}`;
+    //                     contentItem.appendChild(link);
+    //
+    //                     const courseButton = document.createElement('button');
+    //                     courseButton.textContent = '픽업 코스 확인';
+    //                     courseButton.onclick = () => {
+    //                         window.location.href = `/course?bNum=${apply.bnum}`;
+    //                     };
+    //                     contentItem.appendChild(courseButton);
+    //
+    //                     appliedPostList.appendChild(contentItem);
+    //                 });
+    //             } else {
+    //                 console.error('Element #apply-list not found.');
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //         });
+    // });
+
+
+    // 내가 쓴 리뷰 데이터 가져오기
+    fetch('/myReviewList')
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('로그인이 필요합니다.');
+                }
+                if (response.status === 204) {
+                    return Promise.resolve([]);
+                }
+                throw new Error('리뷰 목록을 가져오는 데 실패했습니다.');
+            }
+            return response.json();
+        })
+        .then(reviews => {
+            const myReviewList = document.querySelector('#myreview-list');
+            myReviewList.innerHTML = ''; // 기존 목록 초기화
+
+            if (reviews && reviews.length > 0) {
+                reviews.forEach(review => {
+                    const row = document.createElement('tr');
+
+                    // 게시글 제목 (추가)
+                    const boardTitleCell = document.createElement('td');
+                    boardTitleCell.textContent = review.btitle;
+                    row.appendChild(boardTitleCell);
+
+                    // 리뷰 내용
+                    const reviewContentCell = document.createElement('td'); // 변수명 변경 (titleCell -> reviewContentCell)
+                    reviewContentCell.textContent = review.revContents;  // 텍스트만 추가
+                    row.appendChild(reviewContentCell);
+
+                    // 별점
+                    const ratingCell = document.createElement('td');
+                    const ratingSpan = document.createElement('span');
+                    ratingSpan.classList.add('rating-stars');
+                    for (let i = 1; i <= 5; i++) {
+                        const star = document.createElement('i');
+                        star.classList.add('fa');
+                        if (i <= review.rating) {
+                            star.classList.add('fa-star');  // 채워진 별
+                        } else {
+                            star.classList.add('fa-star-o');  // 빈 별
+                        }
+                        ratingSpan.appendChild(star);
+                    }
+                    ratingCell.appendChild(ratingSpan);
+                    row.appendChild(ratingCell);
+
+                    // 게시글 보기
+                    const detailCell = document.createElement('td');
+                    const detailLink = document.createElement('a');
+                    detailLink.href = `/boarddetail/${review.bnum}`;
+                    detailLink.textContent = '상세보기';
+                    detailCell.appendChild(detailLink);
+                    row.appendChild(detailCell);
+
+                    myReviewList.appendChild(row);
+                });
+            } else {
+                // 리뷰가 없으면 '리뷰가 없습니다' 메시지를 추가
+                const noDataMessage = document.createElement('tr');
+                noDataMessage.classList.add('no-data-message');
+                noDataMessage.innerHTML = '<td colspan="4">리뷰가 없습니다.</td>'; // colspan 수정 (3 -> 4)
+                myReviewList.appendChild(noDataMessage);
+            }
+        })
+        .catch(error => {
+            // 에러 발생 시 테이블에 에러 메시지 추가
+            const myReviewList = document.querySelector('#myreview-list');
+            myReviewList.innerHTML = '<tr><td colspan="4">작성한 리뷰가 없습니다.</td></tr>'; // colspan 수정 (3 -> 4)
+        });
+
+    // 돌봄일지 불러오기
+    $(document).ready(function () {
+        var userId = $('#userIdcheck').val();
+        console.log("로그인된 userId:", userId);
+
+        $.ajax({
+            url: '/diaryList',
+            type: 'GET',
+            data: { userId: userId },
+            success: function (response) {
+                console.log("서버 응답:", response);
+                response = Array.isArray(response) ? response : [];
+
+                var diaryList = $('#diary-list');
+                diaryList.empty();
+                var tableBody = $('.care-list');
+                tableBody.empty();
+
+                if (response.length === 0) {
+                    diaryList.append('<p>등록된 돌봄 일지가 없습니다.</p>');
+                    return;
+                }
+
+                response.forEach(function (diary) {
+                    // console.log("일지 데이터:", diary.reservationDate, diary.petName);
+                    var formattedDate = new Date(diary.reservationDate).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+                    var diaryEntry = `<a href="#" class="diary-link" data-reservation-date="${diary.reservationDate}" data-pet-name="${diary.petName}">🐶 ${formattedDate}, ${diary.petName}의 돌봄일기 💌</a><br>`;
+                    diaryList.append(diaryEntry);
+                });
+
+                // 모달 오픈 이벤트
+                $('.diary-link').click(function (event) {
+                    event.preventDefault();
+                    var reservationDate = $(this).data('reservation-date');
+                    var petName = $(this).data('pet-name');
+
+                    // reservationDate를 년, 월, 일 형식으로 포맷팅
+                    var formattedDate = new Date(reservationDate).toLocaleDateString('ko-KR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    }).replace(/ /g, ' ').replace(/일$/,'일,');  // 공백을 제거하여 원하는 형식으로 만듭니다.
+
+                    // 모달 제목 설정 (포맷된 날짜 사용)
+                    $('#modal-title').text(`${formattedDate} ${petName}의 돌봄일기`);
+                    $('#careDiaryModal').show();
+                    $('#modalOverlay').show();
+
+
+                    // 해당 반려견의 돌봄 일지 로드
+                    var selectedDiary = response.find(diary => String(diary.reservationDate) === String(reservationDate) && String(diary.petName) === String(petName));
+                    console.log('응답 데이터: ', response)
+                    if (!selectedDiary) {
+                        console.error("해당 일지를 찾을 수 없음");
+                        return;
+                    }
+
+                    tableBody.empty();
+                    var row = `
+                    <tr>
+    <td colspan="2">
+        <img src="/upload/${selectedDiary.petPlayProfileName || '/default-image.png'}" alt="반려동물 사진" style="width:90%; height:300px; object-fit:cover;">
+    </td>
+</tr>
+                       <tr>
+    <td><img src="/images/meal.png" alt="밥 아이콘" style="width:24px; height:24px;"></td>
+    <td>${selectedDiary.meal || ''}</td>
+</tr>
+<tr>
+    <td><img src="/images/snack.png" alt="간식 아이콘" style="width:24px; height:24px;"></td>
+    <td>${selectedDiary.snack || ''}</td>
+</tr>
+<tr>
+    <td><img src="/images/play.png" alt="놀이 아이콘" style="width:24px; height:24px;"></td>
+    <td>${selectedDiary.play || ''}</td>
+</tr>
+<tr>
+    <td><img src="/images/poop.png" alt="배변 아이콘" style="width:24px; height:24px;"></td>
+    <td>${selectedDiary.toilet || ''}</td>
+</tr>
+<tr>
+    <td><img src="/images/sleep.png" alt="수면 아이콘" style="width:24px; height:24px;"></td>
+    <td>${selectedDiary.sleep || ''}</td>
+</tr>
+<tr>
+    <td><img src="/images/bath.png" alt="목욕 아이콘" style="width:24px; height:24px;"></td>
+    <td>${selectedDiary.bath || ''}</td>
+</tr>
+<tr>
+    <td><img src="/images/hospital.png" alt="병원 아이콘" style="width:24px; height:24px;"></td>
+    <td>${selectedDiary.hospital || ''}</td>
+</tr>
+<tr>
+    <td><img src="/images/walk.png" alt="산책 아이콘" style="width:24px; height:24px;"></td>
+    <td>${selectedDiary.walk || ''}</td>
+</tr>`
+
+                    tableBody.append(row);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX 에러:", xhr, status, error);
+            }
+        });
+    });
+</script>
+<script>
+    // 등록된 반려견 정보 불러오기
+    $(document).ready(function () {
+        // "내 반려견 정보" 탭 클릭 시
+        $('#petTab').on('click', function () {
+            // AJAX 요청하여 서버에서 반려견 정보 가져오기
+            $.ajax({
+                url: '/getPetInfo',  // 반려견 정보 요청
+                method: 'GET',
+                success: function (response) {
+                    console.log("응답 데이터:", response);  // 응답 데이터 확인
+
+                    // 반려견 정보가 있으면 출력
+                    if (response && response.length > 0) {
+                        let petInfoHtml = '';
+                        response.forEach(pet => {
+                            petInfoHtml += `
+                        <div class="pet-card">
+                            <div class="header">킵펫 친구 등록증</div>
+                            <div class="content">
+                                <div class="photo">
+                                    <img src="${pet.petProfileName ? pet.petProfileName : '/images/default.png'}" alt="${pet.petName || '이름 없음'} 프로필">
+                                </div>
+                                <div class="info">
+                                    <p><strong>이름:</strong> ${pet.petName || '이름 없음'}</p>
+                                    <p><strong>나이:</strong> ${pet.petAge !== null ? pet.petAge : '알 수 없음'}</p>
+                                    <p><strong>크기:</strong> ${getSizeText(pet.categoryNum)}</p>
+                                    <p><strong>성별:</strong> ${getGenderText(pet.petGender)}</p>
+                                    <p><strong>중성화 여부:</strong> ${getNeuteringText(pet.petNeutering)}</p>
+                                    <p><strong>접종 여부:</strong> ${getVaccinText(pet.petVaccin)}</p>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                        });
+
+                        // 그리드 컨테이너로 .pet-cards-container 감싸기
+                        $('#petInfo').html(`
+                    <div class="pet-cards-container">
+                        ${petInfoHtml}
+                    </div>
+                    `);
+                    } else {
+                        $('#petInfo').html('<p>등록된 반려동물이 없습니다.</p>');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("에러 발생:", error);
+                    $('#petInfo').html('<p>반려동물 정보를 불러오는 데 실패했습니다.</p>');
+                }
+            });
+        });
+
+
+        // 크기 변환 함수
+        function getSizeText(size) {
+            const sizeMap = {
+                1: "퍼피",
+                2: "소형견",
+                3: "중형견",
+                4: "대형견",
+                5: "키튼",
+                6: "소형묘",
+                7: "중형묘",
+                8: "대형묘",
+            };
+            return sizeMap[size] || "알 수 없음";
+        }
+
+        // 성별 변환 함수
+        function getGenderText(gender) {
+            const genderMap = {
+                1: "남자",
+                2: "여자"
+            };
+            return genderMap[gender] || "알 수 없음";
+        }
+
+        // 중성화 여부 변환 함수
+        function getNeuteringText(neutering) {
+            const neuteringMap = {
+                1: "유",
+                2: "무"
+            };
+            return neuteringMap[neutering] || "알 수 없음";
+        }
+
+        // 접종 여부 변환 함수
+        function getVaccinText(vaccin) {
+            const vaccinMap = {
+                1: "유",
+                2: "무"
+            };
+            return vaccinMap[vaccin] || "알 수 없음";
+        }
+    });
+    // Get modal and close button
+    const modal = document.getElementById('careDiaryModal');
+    const closeBtn = document.getElementById('closeDiaryyModal');
+    const overlay = document.getElementById('modalOverlay');
+
+    // Close modal when the user clicks outside of the modal content
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            overlay.style.display = "none"; // Close overlay
+        }
+    }
+
+    // Close modal when the close button is clicked
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+        overlay.style.display = "none"; // Close overlay
+    }
+
+
+
+    // 리뷰 제출 시
+    document.getElementById('reviewForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // 기본 제출 동작을 막음
+
+        const revContents = document.getElementById('revContents').value;
+        const ratingValue = document.getElementById('ratingValue').value;
+        const bNum = document.getElementById('BNum').value; // BNum을 숨겨진 input에서 가져옴
+        const userId = document.getElementById('UserId').value; // UserId를 숨겨진 input에서 가져옴
+
+        console.log(ratingValue);
+
+        if (ratingValue === "0") {
+            alert("별점을 선택해주세요!");
+            return;
+        }
+
+        const fileInput = document.getElementById('revFile');
+        const formData = new FormData();
+
+        if (fileInput.files.length > 0) {
+            formData.append('revFile', fileInput.files[0]);
+        }
+
+        // formData의 내용을 콘솔에 출력 (파일 추가 확인용)
+        for (let [key, value] of formData.entries()) {
+            console.log(key, value);
+        }
+
+        // 리뷰 내용과 별점 추가
+        formData.append('bNum', bNum);
+        formData.append('revContents', revContents);
+        formData.append('Rating', ratingValue); // 여기를 'Rating'으로 수정
+        formData.append('userId', userId);  // UserId 추가
+
+        // 서버에 리뷰 제출
+        fetch('/RWrite', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('리뷰가 성공적으로 제출되었습니다!');
+
+                    // "리뷰쓰기" 버튼을 "작성완료" 버튼으로 변경하고 비활성화
+                    const reviewButton = document.querySelector(`button[data-bnum='${bNum}']`);
+                    if (reviewButton) {
+                        reviewButton.textContent = '리뷰완료';
+                        reviewButton.disabled = true;
+                    }
+
+                    // 모달 닫기
+                    const modal = document.getElementById('reviewModal');
+                    modal.style.display = 'none';
+                } else {
+                    alert('리뷰 제출에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('서버 통신 오류:', error);
+                alert('서버에 문제가 발생했습니다.');
+            });
+    });
+
+</script>
+</body>
+</html>
