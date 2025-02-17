@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <title>KeePet - Premium Pet Sitter</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            transition: padding-top 0.3s; /* 부드럽게 padding-top 조정 */
+        }
+
+
+        .hero {
+            position: relative;
+            background-image: url('/images/bannercat1.png');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 50px; /* 좌우 패딩 추가 */
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            height: 400px; /* 섹션 높이 지정 */
+        }
+
+        .hero div {
+            max-width: 600px;
+            left: 50%; /* 텍스트를 화면 중앙으로 약간 이동 */
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .hero p {
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+
+        .hero button {
+            background-color: #e0f0ff;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+
+        .info-section {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .info-text {
+            flex: 1;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .info-text h2 {
+            font-size: 1.8em;
+        }
+
+        .info-text p {
+            font-size: 1em;
+        }
+
+        .info-list {
+            flex: 1;
+            list-style: none;
+            padding: 0 20px; /* 좌우 여백 추가 */
+            max-width: 400px;
+        }
+
+        .info-list li {
+            margin-bottom: 30px; /* 각 항목 간 간격을 늘림 */
+            display: flex;
+            align-items: center;
+        }
+
+        .info-list img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+
+        .categories {
+            display: flex;
+            justify-content: center; /* 요소들을 중앙에 정렬 */
+
+            gap: 20px; /* 요소들 간의 간격 */
+            padding: 20px;
+        }
+
+
+        .category {
+            width: 200px;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px;
+        }
+
+        .category img {
+            width: 150px;
+        }
+
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        /* 팝업 오버레이 */
+        #popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9998;
+            display: none;
+        }
+
+        /* 팝업 */
+        #event-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            z-index: 9999;
+            display: none;
+            padding: 30px 20px 60px; /* 하단 버튼 공간 확보 */
+            font-family: 'Arial', sans-serif;
+            box-sizing: border-box;
+        }
+
+        /* 팝업 제목 */
+        #event-popup h3 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        /* 팝업 본문 */
+        #event-popup p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* 서브 텍스트 */
+        #sub {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* 서브 텍스트 */
+        #sub2 {
+            font-size: 12px;
+            color: gray;
+            margin-bottom: 20px;
+        }
+
+        /* 버튼 컨테이너 (팝업 하단 고정) */
+        .popup-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+        }
+
+        /* 버튼 스타일 */
+        .popup-btn, .close-btn {
+            flex: 1;
+            background: #007bff; /* 동일한 색상 */
+            color: #fff;
+            border: none;
+            padding: 15px 0;
+            font-size: 16px;
+            border-radius: 0; /* 버튼 둥글기 제거 */
+            cursor: pointer;
+            transition: background 0.3s;
+            text-align: center;
+        }
+
+        .popup-btn:hover, .close-btn:hover {
+            background: #0056b3; /* 동일한 호버 색상 */
+        }
+
+        /* 구분선 제거 */
+        .popup-btn + .close-btn {
+            border-left: 1px solid #fff;
+        }
+
+        #bWriteModal {
+            display: none; /* 기본적으로 숨겨져 있음 */
+            gap: 15px;
+            background-color: #ffffff;
+            padding: 20px;
+            width: 500px;
+            height: 700px; /* 고정 높이 */
+            border-radius: 20px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000; /* 모달 위에 뜨게! */
+            overflow-y: auto; /* ✨ 스크롤 되게! ✨ */
+            scrollbar-width: none; /* Firefox 스크롤바 숨김 */
+            display: flex; /* ✨ Flexbox 레이아웃 다시 쓴다! ✨ */
+            flex-direction: column; /* ✨ 모달 전체는 세로 배치 유지! ✨ */
+        }
+
+        /* label 스타일 */
+        #bWriteModal .form-content label {
+            display: inline-block; /* ✨ block 대신 inline-block! ✨ */
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            width: auto; /* ✨ 너비 자동으로! ✨ */
+            margin-right: 10px;
+            text-align: left;
+            vertical-align: top; /* ✨ label 텍스트 위쪽 정렬! ✨ */
+            border-left: solid 3px black;
+            padding-left: 5px;
+        }
+
+        /* input, select, textarea 스타일 */
+        #bWriteModal .form-content input[type="text"],
+        #bWriteModal .form-content input[type="tel"],
+        #bWriteModal .form-content select,
+        #bWriteModal .form-content textarea {
+            display: inline-block; /* ✨ 얘네도 inline-block! ✨ */
+            width: calc(100% - 150px); /* ✨ input 너비 줄여서 label 옆에 공간 확보! ✨ */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            vertical-align: top; /* ✨ input 텍스트 위쪽 정렬! ✨ */
+        }
+
+        #bSubmitForm, #cancel {
+            padding: 12px 20px;
+            background-color: #6287a6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #bSubmitForm:hover {
+            background-color: #85b5d6;
+        }
+
+        #cancel {
+            background-color: #6287a6;
+        }
+
+        #cancel:hover {
+            background-color: #85b5d6;
+        }
+
+        #contents {
+            margin-bottom: 10px;
+        }
+
+        #button {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* 버튼 간격 조정 */
+        }
+
+        .options1 {
+            padding-left: 10px;
+            margin: 5px;
+        }
+
+        .option1.active {
+            background-color: #85b5d6; /* 선택된 버튼은 초록색 */
+            color: white;
+            border-color: #85b5d6; /* 경계선도 초록색으로 */
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<header id="header">
+    <div th:replace="~{cat/header.html}"></div>
+</header>
+
+<section class="hero">
+    <div style="z-index: 2; position: relative;">
+        <h1>KeePet<br>Premium Pet Sitter</h1>
+        <p>내 반려묘를 위한<br>프리미엄 펫케어 서비스</p>
+        <button id="reservation">예약하기</button>
+    </div>
+</section>
+
+
+<div class="modal-overlay" id="bWriteModal" style="display: none; ">
+    <div class="modal-content">
+        <span class="close" id="closeBWriteModal">×</span>
+        <h2 class="modal-title" id="bWriteModalLabel">예약 작성</h2>
+        <div class="modal-body">
+
+            <div class="row">
+                <div class="form-content">
+                    <form action="/bWrite" class="form" enctype="multipart/form-data" method="post" name="bWriteForm">
+                        <input name="UserId" th:value="${session.loginId}" type="hidden"/>
+                        <input name="PetStatus" value="1" type="hidden">
+
+                        <div id="contents">
+                            <label for="BTitle">제목</label>
+                            <input class="form-control custom-input" id="BTitle" name="BTitle" readonly
+                                   style="border: none"
+                                   th:value="'신청합니다.'" type="text"/>
+
+                            <label for="Guardian_Name">보호자 이름</label>
+                            <input id="Guardian_Name" name="GuardianName" th:value="${session.loginId}" type="text">
+
+                            <label for="Guardian_Phone">보호자 연락망</label>
+                            <input id="Guardian_Phone" maxlength="11" name="GuardianPhone" pattern="[0-9]{11}"
+                                   placeholder="'-'없이 숫자만 입력해주세요." th:value="${session.loginPhone}" type="text">
+
+                            <label for="Guardian_Address">보호자 주소</label>
+                            <input id="postCode" onclick="sample6_execDaumPostcode()" type="button" value="우편번호 찾기"><br>
+                            <input id="bSample6_address" placeholder="주소" th:value="${session.loginAddress}"
+                                   type="text"><br>
+                            <input id="Guardian_Address" name="GuardianAddress" type="hidden">
+
+                            <label for="petNum">반려묘 선택</label>
+                            <select class="form-control custom-select" id="petNum" name="PetNum">
+                                <option value="">-- 선택 --</option>
+                                <th:block th:each="pet : ${pets}">
+                                    <option th:text="${pet.petName}" th:value="${pet.petNum}"></option>
+                                </th:block>
+                            </select>
+
+                            <br/>
+
+                            <label for="bService">원하는 서비스</label>
+                            <!-- 서비스 선택 버튼들 -->
+                            <div class="options">
+                                <button
+                                        class="option"
+                                        data-service="6"
+                                        onclick="selectOption(event, 6)"
+                                        type="button"
+                                >
+                                    돌봄
+                                </button>
+                                <button
+                                        class="option"
+                                        data-service="7"
+                                        id="toiletCareOptionButton"
+                                        onclick="selectOption(event, 7)"
+                                        type="button"
+                                >
+                                    화장실케어
+                                </button>
+                            </div>
+                            <div class="selected" id="selectedOption"></div>
+                            <div class="another-selected" id="anotherSelectedOption"></div>
+                            <input id="bService" name="BServices" required type="hidden"/>
+
+                            <!-- 서비스 유형 선택: 화장실 케어 선택 시에만 표시 -->
+                            <div id="serviceTypeSelection" style="display: none;">
+                                <label>서비스 유형 선택</label>
+                                <div class="service-type-options">
+                                    <label class="service-type-label">
+                                        <input
+                                                type="radio"
+                                                name="serviceType"
+                                                id="visitService"
+                                                value="visit"
+                                                onclick="selectServiceType('visit')"
+                                        />
+                                        방문형 서비스
+                                    </label>
+                                    <label class="service-type-label">
+                                        <input
+                                                type="radio"
+                                                name="serviceType"
+                                                id="remoteService"
+                                                value="remote"
+                                                onclick="selectServiceType('remote')"
+                                        />
+                                        비대면 서비스
+                                    </label>
+                                </div>
+                            </div>
+
+                            <label for="Reservation_Date">예약 날짜</label>
+                            <input id="Reservation_Date" name="ReservationDate" placeholder="예약 날짜를 선택해주세요."
+                                   type="text">
+
+                            <label for="bTime">예약 시간</label>
+                            <div class="options1">
+                                <button class="option1" data-option="1" type="button">풀타임(오전 8시 ~ 오후 7시)</button>
+                                <button class="option1" data-option="2" type="button">파트타임(상세내용에 표기)</button>
+                                <button class="option1" data-option="3" type="button">하프타임A(오전 8시 ~ 오후 2시)</button>
+                                <button class="option1" data-option="4" type="button">하프타임B(오후 2시 ~ 오후 7시)</button>
+                            </div>
+                            <div class="selected" id="selectedOption22"></div>
+                            <input id="bTime" name="BTime" required type="hidden"/>
+
+                            <label for="B_Contents">상세 내용</label>
+                            <textarea id="B_Contents" name="BContents" placeholder="파트타임(원하시는 시간대), 요청사항 등을 입력해주세요."
+                                      type="text"></textarea>
+
+                            <label for="B_File">첨부파일</label>
+                            <input id="B_File" name="BFile" type="file"/>
+                            <br/><img id="preImage" width="150px"/>
+
+                            <div id="button">
+                                <input id="bSubmitForm" type="submit" value="예약"/>
+                                <input id="cancel" type="button" value="취소"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="info-section">
+    <div class="info-text">
+        <h2>마음 놓고 보호자님의 일상을 보내세요!</h2>
+        <p>여행, 출장 등 집을 비울 때<br>우리 아이들이 걱정될 때 KeePet이 함께합니다!</p>
+    </div>
+    <ul class="info-list">
+        <li><img src="/images/cpaw.png" alt="Paw"> 여행, 명절 등 장시간 집을 비울 때</li>
+        <li><img src="/images/cpaw.png" alt="Paw"> 출장, 야근 등 갑작스런 일이 생겼을 때</li>
+        <li><img src="/images/cpaw.png" alt="Paw"> 집에 혼자 있는 시간이 많은 아이들</li>
+    </ul>
+</section>
+
+<section class="categories">
+    <div class="category" onclick="window.location.href='/cat/kittenEx';">
+        <img src="/images/kitten.png" alt="kitten">
+        <p>키튼 (~1year)</p>
+    </div>
+    <div class="category" onclick="window.location.href='/cat/sizeEx';">
+        <img src="/images/size.png" alt="size">
+        <p>크기</p>
+    </div>
+    <div class="category" onclick="window.location.href='/cat/skeletonEx';">
+        <img src="/images/skeleton.png" alt="skeleton">
+        <p>골격</p>
+    </div>
+    <br>
+    <div class="category" onclick="window.location.href='/cat/noneEx';">
+        <img src="/images/none.png" alt="none">
+        <p>헤어리스 (무모)</p>
+    </div>
+    <div class="category" onclick="window.location.href='/cat/shortEx';">
+        <img src="/images/short.png" alt="Short">
+        <p>단모</p>
+    </div>
+    <div class="category" onclick="window.location.href='/cat/midEx';">
+        <img src="/images/mid.png" alt="Mid" >
+        <p>중모</p>
+    </div>
+    <div class="category" onclick="window.location.href='/cat/longEx';">
+        <img src="/images/long.png" alt="Long">
+        <p>장모</p>
+    </div>
+
+
+
+</section>
+
+<div id="popup-overlay"></div>
+<div id="event-popup">
+    <h3>🎉 킵펫 공항택시 서비스 오픈! 🎉</h3>
+    <p>반려견과의 여행 시작을<br>킵펫이 편하게 만들어 드립니다!</p>
+    <p id="sub">(인천국제공항만 운행 가능)</p>
+    <p id="sub2">※ 킵펫공항택시를 이용할 경우 타 서비스와 중복이용 불가</p>
+    <img src="/images/택시.png" alt="택시" width="200px" height="150px" />
+    <div class="popup-footer">
+        <button class="popup-btn" onclick="dontShowPopup()">오늘 하루 보지 않기</button>
+        <button class="close-btn" onclick="closePopup()">닫기</button>
+    </div>
+</div>
+
+<footer>
+    <p>KeePet &copy; 2025</p>
+</footer>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+<script>
+    // $(document).ready(function() {
+    //     $('#reservation').on('click', function() {
+    //         // board1Form 페이지로 이동
+    //         window.location.href = '/board1Form';  // '/board1Form'은 이동할 URL입니다.
+    //     });
+    // });
+
+    // 쿠키 설정 함수 (이름, 값, 만료일)
+    function setCookie(name, value, days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = name + "=" + value + "; expires=" + date.toUTCString() + "; path=/";
+    }
+
+    // 쿠키 가져오는 함수
+    function getCookie(name) {
+        let cookies = document.cookie.split('; ');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].split('=');
+            if (cookie[0] === name) {
+                return cookie[1];
+            }
+        }
+        return null;
+    }
+
+    // 오늘 하루 보지 않기
+    function dontShowPopup() {
+        setCookie("hidePopup", "true", 1); // 1일 동안 팝업 숨기기
+        closePopup();
+    }
+
+    // 팝업 닫기
+    function closePopup() {
+        document.getElementById("popup-overlay").style.display = "none";
+        document.getElementById("event-popup").style.display = "none";
+    }
+
+    // 페이지 로드 시 쿠키 확인 후 팝업 표시
+    window.onload = function () {
+        if (!getCookie("hidePopup")) {
+            document.getElementById("event-popup").style.display = "block";
+            document.getElementById("popup-overlay").style.display = "block";
+        }
+    };
+
+
+    // 글쓰기 버튼 클릭 시 모달 열기
+    document.addEventListener('DOMContentLoaded', function () {
+        const modalOverlay = document.querySelector('.modal-overlay');
+        const bWriteModal = document.getElementById('bWriteModal');
+        const showBWriteModalBtn = document.getElementById('reservation');
+        const closeBWriteModal = document.getElementById('closeBWriteModal');
+
+        // '예약 작성' 버튼 클릭 시 모달 열기
+        showBWriteModalBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            history.pushState(null, "", "?showModal=reservation"); // URL 변경 (새로고침 없이)
+            openModal('reservation');
+        });
+
+        // 모달 닫기
+        closeBWriteModal.addEventListener('click', function () {
+            bWriteModal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        });
+
+        // 모달 외부(오버레이) 클릭 시 닫기
+        document.querySelector('.modal-overlay').addEventListener("click", function (event) {
+            if (event.target === document.querySelector('.modal-overlay')) {
+                document.getElementById("bWriteModal").style.display = "none";
+                document.querySelector('.modal-overlay').style.display = "none";
+            }
+        });
+
+        // URL 파라미터로 showModal이 true이면 모달을 열기
+        const urlParams = new URLSearchParams(window.location.search);
+        const showModal = urlParams.get('showModal');
+
+        if (showModal === 'reservation') {
+            openModal('reservation');
+        }
+
+        function openModal(type) {
+            if (type === 'reservation') {
+                bWriteModal.style.display = 'block';
+                modalOverlay.style.display = 'block';
+                fetchPets();
+            }
+        }
+
+        function closeModal() {
+            bWriteModal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+            history.pushState(null, "", window.location.pathname); // URL에서 showModal 제거
+        }
+
+        // 서버에서 pets 목록을 받아오는 함수
+        function fetchPets() {
+            fetch("/bWriteForm")
+                .then(response => response.json())
+                .then(data => {
+                    const petSelect = document.getElementById('petNum');
+                    const pets = data.pets;
+
+                    // 기존의 옵션들 초기화
+                    petSelect.innerHTML = '<option value="">-- 선택 --</option>';
+
+                    // pets 목록을 option 태그로 추가
+                    pets.forEach(pet => {
+                        const option = document.createElement('option');
+                        option.value = pet.petNum;
+                        option.textContent = pet.petName;
+                        petSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching pets:', error);
+                });
+        }
+    });
+
+    // 서비스 다중 선택 처리
+    let selectedServices = [];
+    let selectedServiceType = null; // "visit" or "remote"
+
+    // 서비스 유형 선택 처리
+    function selectServiceType(type) {
+        selectedServiceType = type;
+        console.log("선택된 서비스 유형:", type);
+    }
+
+    // 원하는 서비스 다중 선택 처리
+    function selectOption(event, option) {
+        const serviceButton = event.target; // 클릭된 버튼
+        const serviceButtonText = serviceButton.textContent.trim(); // 버튼 텍스트(서비스 이름)
+        const serviceTypeSelection = document.getElementById(
+            "serviceTypeSelection"
+        ); // 서비스 유형 선택 영역
+
+        // "공항픽업" 선택 시 다른 서비스 선택 불가능하게 처리
+        if (option === 5) {
+            // "공항픽업"을 선택한 경우
+            if (!selectedServices.includes(5)) {
+                // "공항픽업"이 선택되지 않았다면 배열 초기화
+                selectedServices = [5];
+                // 모든 버튼 비활성화 후 "공항픽업" 활성화
+                document.querySelectorAll(".options button").forEach((button) => {
+                    button.classList.remove("selected");
+                });
+                serviceButton.classList.add("selected"); // "공항픽업" 버튼 스타일 변경
+                serviceTypeSelection.style.display = "none"; // 서비스 유형 선택 영역 숨김
+            } else {
+                // 이미 "공항픽업" 선택 시 제거
+                selectedServices = [];
+                serviceButton.classList.remove("selected"); // "공항픽업" 선택 해제
+                serviceTypeSelection.style.display = "none"; // 서비스 유형 선택 영역 숨김
+            }
+        } else {
+            // 다른 서비스를 선택한 경우 "공항픽업"이 이미 선택되었는지 확인
+            if (selectedServices.includes(5)) {
+                alert("공항픽업을 선택한 경우 다른 서비스는 선택할 수 없습니다.");
+                return; // 선택 취소
+            }
+        }
+
+        // 선택된 서비스가 배열에 이미 있는지 확인
+        const index = selectedServices.indexOf(option);
+
+        if (index === -1) {
+            // 선택되지 않은 경우, 배열에 추가
+            selectedServices.push(option);
+            serviceButton.classList.add("selected"); // 버튼 스타일 변경
+
+            // 화장실 케어 선택 시에만 서비스 유형 선택 영역 표시
+            if (option === 7 && !selectedServices.includes(6)) {
+                serviceTypeSelection.style.display = "block";
+            } else {
+                serviceTypeSelection.style.display = "none";
+            }
+        } else {
+            // 이미 선택된 경우, 배열에서 삭제
+            selectedServices.splice(index, 1); // 배열에서 해당 옵션 제거
+            serviceButton.classList.remove("selected"); // 버튼 스타일 변경 (선택 해제)
+
+            // 화장실 케어 제거 시, 돌봄이 선택되지 않았을 때만 서비스 유형 선택 영역 표시
+            if (option === 7 && !selectedServices.includes(6)) {
+                serviceTypeSelection.style.display = "none";
+            } else {
+                serviceTypeSelection.style.display = "none";
+            }
+        }
+
+        // 선택된 서비스들을 화면에 표시
+        updateSelectedServices();
+    }
+
+    // '추가된 서비스'에서 클릭하면 해당 서비스 취소
+    document
+        .getElementById("anotherSelectedOption")
+        .addEventListener("click", function (event) {
+            const clickedService = event.target;
+
+            if (clickedService.classList.contains("remove-service")) {
+                const serviceId = parseInt(clickedService.getAttribute("data-service"));
+
+                // 해당 서비스가 배열에서 제거
+                const index = selectedServices.indexOf(serviceId);
+                if (index !== -1) {
+                    selectedServices.splice(index, 1); // 배열에서 해당 옵션 제거
+                    // 버튼 스타일 변경
+                    const serviceButton = document.querySelector(
+                        `button[data-service="${serviceId}"]`
+                    );
+                    if (serviceButton) {
+                        serviceButton.classList.remove("selected");
+                    }
+
+                    // 화장실 케어가 제거되면, 돌봄이 선택되지 않았을 때만 서비스 유형 선택 영역 숨김
+                    if (serviceId === 7 && !selectedServices.includes(6)) {
+                        document.getElementById("serviceTypeSelection").style.display =
+                            "none";
+                    }
+                }
+
+                // 다시 선택된 서비스들 화면에 반영
+                updateSelectedServices();
+            }
+        });
+
+    // 선택된 서비스 목록을 화면에 갱신
+    function updateSelectedServices() {
+        const anotherSelectedDiv = document.getElementById("anotherSelectedOption");
+
+        // 화면에 표시할 서비스 이름 설정
+        const serviceNames = {
+            6: "돌봄",
+            7: "화장실 케어",
+        };
+
+        // 선택된 서비스들을 화면에 표시 (다시 표시하도록)
+        const selectedServiceHTML = selectedServices
+            .map((id) => {
+                return `<span class="service">${serviceNames[id]} <button class="remove-service" data-service="${id}">×</button></span>`;
+            })
+            .join(", ");
+
+        // 선택된 서비스들을 '추가된 서비스' 영역에만 표시
+        anotherSelectedDiv.innerHTML = selectedServiceHTML;
+
+        // 다중 선택된 서비스 값들을 숨겨진 input에 쉼표로 구분하여 저장
+        document.getElementById("bService").value = selectedServices.join(",");
+
+        // 선택된 서비스들 콘솔 출력
+        console.log("선택된 서비스들:", selectedServices);
+
+        // 선택된 반려견 이름 가져오기
+        const petSelect = document.getElementById("petNum"); // 반려견 선택 드롭다운
+        const petName = petSelect.options[petSelect.selectedIndex].text; // 선택된 옵션의 텍스트 (반려견 이름)
+
+        // 제목 설정 로직
+        let title = "";
+        if (selectedServices.includes(5)) {
+            title = `${petName}을 데려다 주세요!`;
+        } else if (selectedServices.length > 0) {
+            if (selectedServices.length === 1 && selectedServices.includes(7)) {
+                title =
+                    selectedServiceType === "visit"
+                        ? `${petName}의 집을 치워주세요!`
+                        : `${petName}의 모래를 부탁해요!`;
+            } else if (selectedServices.length === 1 && selectedServices.includes(6)) {
+                title = `${petName}을 부탁해요!`;
+            } else {
+                title = `${petName}과 시간을 보내요!`;
+            }
+        }
+
+        // 제목 입력 필드에 자동 입력
+        document.getElementById("BTitle").value = title;
+    }
+
+    // 예약 시간 선택
+    document.querySelectorAll('.options1 .option1').forEach(button => {
+        button.addEventListener('click', function () {
+            const option = this.getAttribute('data-option'); // data-option 속성 값 가져오기
+
+            // 버튼을 모두 비활성화 상태로 초기화
+            const buttons = document.querySelectorAll('.options1 .option1');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // 선택된 버튼에 active 클래스 추가
+            this.classList.add('active');
+
+            // 선택된 시간 값을 hidden input에 설정
+            document.getElementById('bTime').value = option;
+            console.log('선택된 예약 시간:', option);
+        });
+    });
+
+    // 날짜 달력 형식으로 표기
+    document.addEventListener('DOMContentLoaded', function () {
+        flatpickr("#Reservation_Date", {
+            locale: "ko", // 한국어 설정
+            dateFormat: "Y-m-d", // 날짜 형식
+            minDate: "today", // 오늘 날짜 이후로만 선택 가능
+            altInput: true, // 입력 필드에 달력 형식으로 보여주기
+            altFormat: "Y F J", // 표시 형식
+            allowInput: true, // 사용자 입력 가능
+        });
+    });
+
+
+
+</script>
+</html>
