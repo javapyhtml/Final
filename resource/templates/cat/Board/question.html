@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeePet - Premium Pet Sitter</title>
+    <link rel="stylesheet" href="/css/catquestion.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+</head>
+<body>
+
+<header id="header">
+    <div th:replace="~{cat/header.html}"></div>
+</header>
+
+
+<section class="hero">
+    <div style="z-index: 2; position: relative;">
+        <h1>Keepet</h1>
+        <p>KeePet에 대하여 궁금한 게 있으신가요?</p>
+        <p>많은 분들이 궁금해 하시는 것, <br> 전부 정리해뒀습니다!</p>
+    </div>
+</section>
+
+
+<div class="faq-container">
+    <div class="faq-item">
+        <button class="faq-question">집에 낮에 사람이 없는데 빈집에 방문하면 우려스럽지 않을까요?
+           <span class="arrow">&#9660;</span></button>
+        <div class="faq-answer">
+            <p>현재까지 도난사례는 없었으며 도난예방을 위해 입실부터 퇴실시까지 액션캠으로 녹화 후 보호자 분께 녹화본을 전달하고 있습니다.</p>
+        </div>
+    </div>
+    <div class="faq-item">
+        <button class="faq-question">저희집은 다묘라 화장실이 많은데 비용이 어떻게 계산되나요? <span class="arrow">&#9660;</span></button>
+        <div class="faq-answer">
+            <p>서비스 기본비용에 추가되는 화장실 갯수만큼 합산되어 계산됩니다.</p>
+        </div>
+    </div>
+    <div class="faq-item">
+        <button class="faq-question">화장실 케어 서비스도 인천만 되나요? <span class="arrow">&#9660;</span></button>
+        <div class="faq-answer">
+            <p>현재는 대면, 비대면 둘 다 인천 지역 내만 가능합니다.</p>
+        </div>
+    </div>
+    <div class="faq-item">
+        <button class="faq-question">서비스 변경 및 환불기준이 궁금합니다. <span class="arrow">&#9660;</span></button>
+        <div class="faq-answer">
+            <p>서비스 취소시 환불절차와 기준에 따라 환불해 드립니다.<br>
+                할인된 비용으로 결제하였을 경우, 취소시에는 서비스 정가를 기준으로 계산하여 차액을 환불해 드립니다.<br>
+                서비스 일정 연기는 회당 1회까지 무료로 가능하며, 2회부터는 3,000원의 변경비용이 부과됩니다.<br>
+                노쇼(화장실을 수거일에 내놓지 않았거나, 방문시 출입이 불가한 경우)의 경우 환불되지 않습니다.</p>
+        </div>
+    </div>
+    <div class="faq-item">
+        <button class="faq-question">이용가능한 화장실 규격이 궁금합니다. <span class="arrow">&#9660;</span></button>
+        <div class="faq-answer">
+            <p>** 화장실 크기 기준 (가로x세로x높이) <br>
+                기준사이즈 : 450x610x250 mm
+                <br>
+                * 기준 사이즈 이하는 중형, 이상은 대형입니다.<br>
+                * 뚜껑이 있는 화장실은 대형으로 간주합니다.<br>
+                * 대형 이상의 네모난 스퀘어화장실은 추가요금이 있습니다.<br>
+
+            </p>
+        </div>
+    </div>
+    <div class="faq-item">
+        <button class="faq-question">결제는 어떻게 하나요? <span class="arrow">&#9660;</span></button>
+        <div class="faq-answer">
+            <p>코스를 따로 제공한 후 코스 화면에서 결제하시면 됩니다.</p>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    document.querySelectorAll('.faq-question').forEach(button => {
+        button.addEventListener('click', () => {
+            const faqAnswer = button.nextElementSibling;
+
+            // Toggle active class for the arrow rotation
+            button.classList.toggle('active');
+
+            // Toggle the visibility of the answer
+            if (faqAnswer.style.display === 'block') {
+                faqAnswer.style.display = 'none';
+            } else {
+                faqAnswer.style.display = 'block';
+            }
+        });
+    });
+
+</script>
+</html>

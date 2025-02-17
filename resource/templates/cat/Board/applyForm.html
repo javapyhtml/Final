@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/index.css" rel="stylesheet">
+    <link href="/css/header.css" rel="stylesheet">
+    <link href="/css/applyForm.css" rel="stylesheet">
+
+    <title>KeePet - Premium Pet Sitter</title>
+</head>
+
+<body id="bBody">
+
+</br></br>
+</br></br>
+
+<form action="/apply" method="POST">
+    <!-- BNum과 CategoryNum을 히든 필드로 전달 -->
+    <input name="BNum" th:value="${bNum}" type="hidden">
+    <input name="CategoryNum" th:value="${categoryNum}" type="hidden">
+
+    <!-- 로그인된 사용자 정보를 히든으로 전달 -->
+    <input name="UserId" th:value="${session.loginId}" type="hidden">
+    <input name="UserGender" th:value="${session.loginGender}" type="hidden">
+    <input name="UserNickName" th:value="${session.loginNickname}" type="hidden">
+
+    <!-- AStatus의 기본값을 0으로 설정 -->
+    <input name="AStatus" type="hidden" value="0">
+
+    <!-- 테이블 형식으로 변경 -->
+    <table>
+        <tr>
+            <th for="BNum">게시글</th>
+            <td><input id="BNum" name="BNum" readonly th:value="${bNum}" type="number"></td>
+        </tr>
+
+        <tr>
+            <th for="CategoryNum">게시판 유형</th>
+            <td><input id="CategoryNum" name="CategoryNum" readonly th:value="${categoryNum}" type="number"></td>
+        </tr>
+
+        <tr>
+            <th for="UserGender">성별</th>
+            <td><input id="UserGender" name="UserGender" readonly th:value="${session.loginGender}" type="text"></td>
+        </tr>
+
+        <tr>
+            <th for="UserNickName">닉네임</th>
+            <td><input id="UserNickName" name="UserNickName" readonly th:value="${session.loginNickname}" type="text">
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align: center;">
+                <button type="submit">신청하기</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

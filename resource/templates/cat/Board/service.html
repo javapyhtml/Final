@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeePet - Premium Pet Sitter</title>
+    <link rel="stylesheet" href="/css/catservice.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <style>
+        h2 {
+            color: #222;
+            border-bottom: 3px solid #f4c542;
+            display: inline-block;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .container1 {
+            display: flex;
+            margin-left: 300px;
+            gap: 20px;
+        }
+
+        .box {
+            width: 48%;
+        }
+
+        #box1 h2 {
+            margin-left: 800px;
+        }
+
+        .box1 {
+            width: 25%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+      th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+      th {
+            background-color: #f4c542;
+            color: #222;
+        }
+      td:first-child {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<header id="header">
+    <div th:replace="~{cat/header.html}"></div>
+</header>
+
+<section class="hero">
+    <div style="z-index: 2; position: relative;">
+        <h1>Keepet</h1>
+        <p>반려묘과 반려인 모두를 생각한<br>1:1 맞춤 펫시팅 서비스</p>
+        <p>오랜시간 집을 비우거나 갑작스럽게 일이 생겼을 때,<br>우리 아이들이 걱정되셨나요?</p>
+    </div>
+</section>
+
+<main>
+    <section class="service">
+        <div class="service-item">
+            <img src="/images/캣시터.png" alt="캣시터 아이콘" class="left">
+            <div class="text">
+                <h2>돌봄</h2>
+                <p>환경 변화에 예민한 보호자들의 반려묘를 위해<br>펫시터의 전문적인 돌봄</p>
+            </div>
+        </div>
+
+        <div class="service-item">
+            <div class="text">
+                <h2>화장실 케어</h2>
+                <p>처리하기 곤란한 고양이 배설물!<br>매번 갈아야 하는 모래와 세척이 필요한 화장실<br>처리는 킵펫이</p>
+            </div>
+            <img src="/images/고양이화장실.png" alt="화장실 아이콘" class="right">
+        </div>
+    </section>
+
+<br>
+<br>
+
+
+    <section class="service">
+        <div class="container">
+            <!-- 방문형 -->
+            <div class="box">
+                <h2>방문형</h2>
+                <p>매니저가 집으로 방문하여 화장실 세척부터 모래 폐기까지 원스톱으로 진행합니다.</p>
+                <table>
+                    <tr>
+                        <th>항목</th>
+                        <th>방문형</th>
+                    </tr>
+                    <tr>
+                        <td>화장실</td>
+                        <td>세척, (살균) 물기제거, 새모래 세팅</td>
+                    </tr>
+                    <tr>
+                        <td>모래처리</td>
+                        <td>폐모래 폐기대행(수거X) *배변모음은 해당되지 않음</td>
+                    </tr>
+                    <tr>
+                        <td>그 외</td>
+                        <td>뚜껑 세척, 화장실 주변정돈, (요청시) 화장실 및 모래 상담</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 비대면형 -->
+            <div class="box">
+                <h2>비대면형</h2>
+                <p>사용한 모래가 담긴 화장실을 집앞에 꺼내놓으면 깨끗한 화장실이 집앞에 배송됩니다.</p>
+                <table>
+                    <tr>
+                        <th>항목</th>
+                        <th>비대면형</th>
+                    </tr>
+                    <tr>
+                        <td>화장실</td>
+                        <td>세척, (살균)</td>
+                    </tr>
+                    <tr>
+                        <td>모래처리</td>
+                        <td>폐모래 수거 (1화장실당 10kg까지)</td>
+                    </tr>
+                    <tr>
+                        <td>그 외</td>
+                        <td>화장실 포장/배송(48시간이내)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+<br><br>
+    <section id="box1">
+        <h2>서비스 금액</h2>
+        <div class="container1">
+
+            <!-- 기본 금액 (중형 또는 대형) -->
+            <div class="box1">
+                <table>
+                    <tr>
+                        <th colspan="2">기본 금액 (중형 또는 대형)</th>
+                    </tr>
+                    <tr>
+                        <td>1회</td>
+                        <td>50,000원</td>
+                    </tr>
+                    <tr>
+                        <td>3회</td>
+                        <td>120,000원</td>
+                    </tr>
+                    <tr>
+                        <td>6회</td>
+                        <td>230,000원</td>
+                    </tr>
+                    <tr>
+                        <td>12회</td>
+                        <td>460,000원</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 기본 금액 (스퀘어) -->
+            <div class="box1">
+                <table>
+                    <tr>
+                        <th colspan="2">기본 금액 (스퀘어)</th>
+                    </tr>
+                    <tr>
+                        <td>1회</td>
+                        <td>55,000원</td>
+                    </tr>
+                    <tr>
+                        <td>3회</td>
+                        <td>135,000원</td>
+                    </tr>
+                    <tr>
+                        <td>6회</td>
+                        <td>270,000원</td>
+                    </tr>
+                    <tr>
+                        <td>12회</td>
+                        <td>540,000원</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 추가 화장실 -->
+            <div class="box1">
+                <table>
+                    <tr>
+                        <th colspan="2">추가 화장실</th>
+                    </tr>
+                    <tr>
+                        <td>중형</td>
+                        <td>6,000원</td>
+                    </tr>
+                    <tr>
+                        <td>대형</td>
+                        <td>10,000원</td>
+                    </tr>
+                    <tr>
+                        <td>스퀘어</td>
+                        <td>15,000원</td>
+                    </tr>
+                    <tr>
+                        <td>뚜껑</td>
+                        <td>5,000원</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </section>
+<br><br>
+    <section>
+        <div id="page-container">
+            <div id="content-container">
+
+                <!-- 비대면형 이용방법 -->
+                <div id="non-face-to-face" class="section-box">
+                    <h2 id="non-face-title" class="section-title">비대면형 이용방법</h2>
+
+                    <p id="non-face-desc" class="sub-title">비대면형 운영</p>
+                    <p id="non-face-text" class="text-content">
+                        서비스 요일 : 월요일~금요일 (*주말과 공휴일은 운영하지 않습니다.)<br>
+                        서비스 지역 : 인천<br>
+                        서비스 이용: 1회, 3회~12회 신청
+                    </p>
+
+                    <p id="non-face-toilet-title" class="sub-title">화장실 & 모래수거</p>
+                    <p id="non-face-toilet-text" class="text-content">
+                        현관앞에 사용한 화장실과 모래를 내놓으세요.<br>
+                        * 화장실 배출 시 신문지나 비닐로 모래가 담긴 부분을 덮어두시면 좋습니다.<br>
+                        * 폐기용 모래 수거 기준은 10kg 이내입니다.<br>
+                        지정한 날짜 저녁 7시 이후 수거합니다.
+                    </p>
+
+                    <p id="non-face-clean-title" class="sub-title">깨끗한 화장실 배송</p>
+                    <p id="non-face-clean-text" class="text-content">
+                        깨끗하게 세척된 화장실이 포장되어 배송됩니다.<br>
+                        * 평균적인 특수 세척되며 48시간 이내 배송됩니다.<br>
+                        * 화장실을 받은 후 집안에서 새 모래를 부어 사용하세요.
+                    </p>
+
+                    <p id="non-face-note" class="important-note">※ 보호자님 준비사항</p>
+                    <p id="non-face-note-text" class="text-content">
+                        새모래 : 갈아줄 새모래를 준비해 주세요.<br>
+                        화장실 수거를 위한 건물 출입 방법을 미리 안내해 주세요.
+                    </p>
+                </div>
+
+                <!-- 방문형 이용방법 -->
+                <div id="visit-type" class="section-box">
+                    <h2 id="visit-title" class="section-title">방문형 이용방법</h2>
+
+                    <p id="visit-time-title" class="sub-title">방문형 운영 시간</p>
+                    <p id="visit-time-text" class="text-content">
+                        서비스 요일 : 월요일~금요일 (* 주말과 공휴일은 운영하지 않습니다.)<br>
+                        서비스 시간 : 09시 ~ 18시<br>
+                        서비스 이용: 1회, 3~12회 신청
+                    </p>
+
+                    <p id="visit-area-title" class="sub-title">방문형 가능 지역</p>
+                    <p id="visit-area-text" class="text-content">
+                        서비스 지역 : 인천<br>
+                        * 3팀 이상이 모아서 함께 신청하면 조율 가능.<br>
+                        (인천 관내이며 집간 거리는 10km 이내, 서비스 이용횟수와 날짜가 같아야 합니다.)
+                    </p>
+
+                    <p id="visit-manager-title" class="sub-title">방문형 서비스 매니저</p>
+                    <p id="visit-manager-text" class="text-content">
+                        회사에서 신분 확인 : 신분확인된 매니저가 방문하고 있으며, 담당 매니저 변경 시 미리 안내합니다.<br>
+                        고양이 돌봄 교육 이수자 : 고양이 정서에 익숙해 친화적이며 탈출우려에서 안전합니다.<br>
+                        액션캠 촬영 : 서비스 시 액션캠 촬영으로 안전을 대비합니다.
+                    </p>
+
+                    <p id="visit-note" class="important-note">※ 보호자님 준비사항</p>
+                    <p id="visit-note-text" class="text-content">
+                        새모래 : 갈아줄 새모래를 준비해 주세요.<br>
+                        사용한 모래 폐기 봉투 : 쓰레기 봉투나 특수처리봉투(지역별 상이, 10리터로 준비 요망)<br>
+                        휴지통 및 세척공간 : 물세척 할 수 있는 공간으로 사람화장실이 적당합니다.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+        <section class="notice">
+        <p>※ 다음과 같은 서비스는 제공할 수 없습니다.</p>
+            <br>
+        <ul>
+            <li>실내청소, 세탁, 쓰레기 분리수거 등의 일반 가사업무</li>
+            <li>주사 또는 투약 행위(수의사법에 의해 금지된 의료행위 일체)</li>
+            <li>반려동물 외 육아업무</li>
+                    </ul>
+    </section>
+
+</main>
+</body>
+</html>

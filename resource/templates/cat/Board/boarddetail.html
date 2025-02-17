@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Untree.co" name="author">
+    <link href="/static/favicon.png" rel="shortcut icon">
+    <meta content="" name="description"/>
+    <meta content="bootstrap, bootstrap4" name="keywords"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="/css/header.css" rel="stylesheet">
+    <link href="/css/boarddetail.css" id="detail-stylesheet" rel="stylesheet">
+    <link disabled href="/css/boardform.css" id="edit-stylesheet" rel="stylesheet">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+
+    <!--    <link rel="stylesheet" href="/css/comment&action.css">-->
+    <title>KeePet - Premium Pet Sitter</title>
+</head>
+<body style="margin: 0;">
+<!-- ##### Header Area Start ##### -->
+<header id="header">
+    <div th:replace="~{cat/header.html}"></div>
+</header>
+
+<div class="board-container">
+    <h1 class="board-title" th:text="${board.bTitle}"></h1> <!-- 제목 강조 -->
+
+    <!-- 작성자 및 날짜 정보 -->
+    <div class="board-info">
+        <p>작성자: <span th:text="${board.userId}"></span></p>
+        <p>작성일: <span th:text="${#temporals.format(board.bDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+    </div>
+
+    <!-- 게시글 이미지 (사진을 위에 배치) -->
+    <div class="board-image-container">
+        <img th:src="@{|/boardUpload/${board.bFileName}|}" class="board-image" alt="게시글 이미지">
+    </div>
+
+    <!-- 추가 정보 (보호자 정보, 반려견 정보, 서비스 등) -->
+    <div class="board-extra-info">
+        <div class="info-item">
+            <strong>보호자 이름:</strong> <span th:text="${board.guardianName}"></span>
+        </div>
+        <div class="info-item">
+            <strong>보호자 연락처:</strong> <span th:text="${board.guardianPhone}"></span>
+        </div>
+        <div class="info-item">
+            <strong>반려견 이름:</strong> <span th:text="${pet.petName}"></span>
+        </div>
+        <div class="info-item">
+            <strong>픽업 장소:</strong> <span th:text="${board.guardianAddress}"></span>
+        </div>
+        <div class="info-item">
+            <strong>서비스:</strong> <span id="serviceText"></span>
+        </div>
+        <div class="info-item">
+            <strong>시간:</strong> <span id="timeText"></span>
+        </div>
+        <div class="info-item">
+            <strong>예약일:</strong> <span th:text="${#dates.format(board.reservationDate, 'yyyy-MM-dd')}"></span>
+        </div>
+    </div>
+
+
+    <!-- 게시글 내용 -->
+    <div class="board-content">
+        <strong>내용</strong>
+        <p class="board-text" th:text="${board.bContents}"></p>
+    </div>
+
+    <!-- 버튼 (신청 & 수정) -->
+    <div class="board-actions">
+        <button class="btn btn-primary" id="apply" onclick="openModal()">신청</button>
+        <button class="btn btn-primary" id="editButton" onclick="toggleEditMode()">수정</button>
+    </div>
+</div>
+
+
+
+<!-- 신청 모달 구조 -->
+<div class="modal" id="detailModal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">×</span>
+        <h2>픽업 신청</h2>
+        <form action="/apply" id="applyForm" method="post">
+            <!-- 신청 정보 -->
+            <input name="UserId" th:value="${session.loginId}" type="hidden"/>
+            <input name="BNum" th:value="${board.bNum}" type="hidden"/>
+            <input name="PetNum" th:value="${board.petNum}" type="hidden"/>
+            <input name="CategoryNum" th:value="${board.categoryNum}" type="hidden"/>
+
+            <br>
+
+            <!-- 반려견 이름 확인 -->
+            <div class="pet-select">
+                <strong>반려견 이름</strong>
+                <p th:text="${pet.petName}"></p>
+            </div>
+<br>
+            <div class="confirmation">
+                <p>위 반려견 이름이 맞으십니까?</p>
+            </div>
+            <br>
+            <input name="PStatus" type="hidden" value="0"/>
+            <input name="RStatus" type="hidden" value="0"/>
+
+            <div class="modal-button">
+                <!-- 확인 버튼 클릭 시 바로 폼 제출 -->
+                <button onclick="submitApplyForm()" type="button">확인</button>
+                <button onclick="closeModal()" type="button">취소</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- 수정 폼 (숨겨진 상태) -->
+<div id="editForm" style="display: none;">
+    <!--    <h1>게시글 수정</h1>-->
+    <div class="row">
+        <div class="form-content">
+            <form action="/bEdit" class="form" enctype="multipart/form-data" id="edit-form" method="post"
+                  name="bModifyForm">
+                <input name="UserId" th:value="${session.loginId}" type="hidden"/>
+                <input name="bNum" th:value="${board.bNum}" type="hidden"/>  <!-- 게시글 번호 추가 -->
+
+                <div id="contents">
+                    <!-- 제목은 수정 불가로 처리 -->
+                    <label for="BTitle">제목</label>
+                    <input class="form-control custom-input" id="BTitle" name="BTitle" readonly style="border: none"
+                           th:value="${board.bTitle}"
+                           type="text"/>
+
+                    <!-- 보호자 이름은 수정 불가로 처리 -->
+                    <label for="Guardian_Name">보호자 이름</label>
+                    <input id="Guardian_Name" name="GuardianName" readonly style="border: none"
+                           th:value="${board.guardianName}"
+                           type="text"/>
+
+                    <label for="Guardian_Phone">보호자 연락처</label>
+                    <input id="Guardian_Phone" maxlength="11" name="GuardianPhone" pattern="[0-9]{8}"
+                           placeholder="'-'없이 숫자만 입력해주세요." th:value="${board.guardianPhone}" type="text"/>
+
+                    <label for="Guardian_Address">보호자 주소</label>
+                    <input id="postCode" onclick="sample6_execDaumPostcode()" type="button" value="우편번호 찾기"><br>
+                    <input id="bSample6_address" placeholder="주소" th:value="${board.guardianAddress}" type="text"><br>
+                    <!--                    <input id="bSample6_detailAddress" placeholder="상세주소" type="text"><br>-->
+                    <input id="Guardian_Address" name="GuardianAddress" type="hidden">
+
+                    <br/>
+
+                    <label for="bService">원하는 서비스</label>
+                    <div class="options">
+                        <button class="option" onclick="selectOption(event, 1)" data-service="1" type="button">산책</button>
+                        <button class="option" onclick="selectOption(event, 2)" data-service="2" type="button">목욕</button>
+                        <button class="option" onclick="selectOption(event, 3)" data-service="3" type="button">미용</button>
+                        <button class="option" onclick="selectOption(event, 4)" data-service="4" type="button">병원</button>
+                        <button class="option" onclick="selectOption(event, 5)" data-service="5" type="button">공항픽업</button>
+                    </div>
+                    <div class="selected" id="selectedOption"></div>
+                    <div class="another-selected" id="anotherSelectedOption"></div>
+                    <input id="bService" name="BServices" required type="hidden"/>
+
+                    <label for="Reservation_Date">예약 날짜</label>
+                    <input id="Reservation_Date" name="ReservationDate"
+                           th:value="${#dates.format(board.reservationDate, 'yyyy-MM-dd')}"
+                           type="text"/>
+
+                    <label for="bTime">예약 시간</label>
+                    <div class="options2">
+                        <button class="option2" data-option="1" type="button">풀타임(오전 8시 ~ 오후 7시)</button>
+                        <button class="option2" data-option="2" type="button">하프타임A(오전 8시 ~ 오후 2시)</button>
+                        <button class="option2" data-option="3" type="button">하프타임B(오후 2시 ~ 오후 7시)</button>
+                        <button class="option2" data-option="4" type="button">파트타임(상세내용에 표기)</button>
+                    </div>
+                    <div class="selected" id="selectedOption7"></div>
+                    <input id="bTime" name="BTime" required type="hidden"/>
+
+                    <label for="B_Contents">상세 내용</label>
+                    <textarea id="B_Contents" name="BContents" placeholder="파트타임(원하시는 시간대), 요청사항 등을 입력해주세요." th:value="${board.bContents}"
+                              type="text"></textarea>
+
+                    <label for="B_File">첨부파일</label>
+                    <input id="B_File" name="BFile" type="file"/>
+                    <br/><img id="preImage" width="150px"/>
+
+                    <div id="button">
+                        <input id="bSubmitForm" type="submit" value="수정 완료"/>
+                        <input id="cancel" onclick="cancelEdit()" type="button" value="취소"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+
+    // 날짜 달력 형식으로 표기
+    document.addEventListener('DOMContentLoaded', function () {
+        flatpickr("#Reservation_Date", {
+            locale: "ko", // 한국어 설정
+            dateFormat: "Y-m-d", // 날짜 형식
+            minDate: "today", // 오늘 날짜 이후로만 선택 가능
+            altInput: true, // 입력 필드에 달력 형식으로 보여주기
+            altFormat: "Y F J", // 표시 형식
+            allowInput: true, // 사용자 입력 가능
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('serviceText').textContent = getsText(bServicesData);
+        document.getElementById('timeText').textContent = getTimeText(bTimeData);
+    });
+
+    function openModal() {
+        const modal = document.getElementById("detailModal");
+        modal.style.display = "block";
+    }
+
+    function toggleEditMode() {
+        // 게시글 디테일을 숨기고 수정 폼을 보여줌
+        document.querySelector('.board-container').style.display = 'none';
+        document.getElementById('editForm').style.display = 'block';
+
+
+        // 수정 폼을 위한 CSS 적용
+        document.getElementById('detail-stylesheet').disabled = true;  // 디테일 CSS 비활성화
+        document.getElementById('edit-stylesheet').disabled = false;  // 수정 폼 CSS 활성화
+
+
+        // 기존 값을 수정 폼에 채워넣기
+        document.getElementById('form-bNum').value = document.getElementById('board-bNum').innerText;
+
+        // 제목과 보호자 이름은 readonly로 설정되어 있으므로 그냥 값만 표시
+        document.getElementById('BTitle').value = document.getElementById('board-bTitle').innerText;
+        document.getElementById('Guardian_Name').value = document.getElementById('board-guardianName').innerText;
+
+        // 나머지 항목들은 수정이 가능하므로 그대로 값을 넣음
+        document.getElementById('BContents').value = document.getElementById('board-bContents').innerText;
+        document.getElementById('Guardian_Phone').value = document.getElementById('board-guardianPhone').innerText;
+        document.getElementById('Guardian_Address').value = document.getElementById('board-guardianAddress').innerText;
+        document.getElementById('BServices').value = document.getElementById('board-bServices').innerText;
+        document.getElementById('BTime').value = document.getElementById('board-bTime').innerText;
+        document.getElementById('Reservation_Date').value = document.getElementById('board-reservationDate').innerText;
+    }
+
+    function cancelEdit() {
+        // 수정 폼을 숨기고 게시글 디테일을 다시 보이도록 함
+        document.querySelector('.board-container').style.display = 'block';
+        document.getElementById('editForm').style.display = 'none';
+    }
+
+    // 수정 완료 후 처리 (서버에서 데이터를 받아 수정된 내용 반영)
+    document.getElementById('edit-form').addEventListener('submit', function (event) {
+        event.preventDefault();  // 기본 제출 방지
+
+        // 폼 데이터를 서버로 전송하는 방법 (예: AJAX 또는 전통적인 폼 제출)
+        // 서버에서 응답 후 상세 페이지로 돌아가도록 처리
+        alert('수정이 완료되었습니다!');
+        document.querySelector('.board-container').style.display = 'block';
+        document.getElementById('editForm').style.display = 'none';
+
+        // 디테일 페이지를 위한 CSS 적용
+        document.getElementById('detail-stylesheet').disabled = false;  // 디테일 CSS 활성화
+        document.getElementById('edit-stylesheet').disabled = true;  // 수정 폼 CSS 비활성화
+
+    });
+
+
+    function submitApplyForm() {
+        alert('신청이 완료되었습니다!'); // 신청 완료 알림 표시
+        document.getElementById('applyForm').submit(); // 폼 제출
+    }
+
+
+</script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const bServicesData = `[[${board.bServices}]]`;
+    const bTimeData = `[[${board.bTime}]]`;
+
+    function getsText(bService) {
+        const serviceMap = {
+            '1': '산책',
+            '2': '목욕',
+            '3': '병원',
+            '4': '미용',
+            '5': '공항픽업'
+        };
+        let sTextArray = [];
+        const bServiceStr = String(bService || ''); // null 또는 undefined 처리 추가
+
+        for (const serviceCode in serviceMap) {
+            if (bServiceStr.includes(serviceCode)) {
+                sTextArray.push(serviceMap[serviceCode]);
+            }
+        }
+        return sTextArray.join(',');
+    }
+
+    function getTimeText(btime) {
+        switch (Number(btime)) { // 문자열로 전달될 수 있으므로 Number()로 변환
+            case 1:
+                return "풀타임(오전 8시 ~ 오후 7시)";
+            case 2:
+                return "하프타임A(오전 8시 ~ 오후 2시)";
+            case 3:
+                return "하프타임B(오후 2시 ~ 오후 7시)";
+            case 4:
+                return "파트타임(아래에 표기)";
+            default:
+                return "알 수 없음";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('serviceText').textContent = getsText(bServicesData);
+        document.getElementById('timeText').textContent = getTimeText(bTimeData);
+
+        // '산책'이 선택된 경우 신청 버튼 숨기기
+        if (bServicesData.includes('1') && bServicesData.length === 1) {
+            // "1"만 선택된 경우
+            document.getElementById('apply').style.display = 'none';
+        } else {
+            // "1"과 다른 값들이 함께 선택된 경우
+            document.getElementById('apply').style.display = 'block';
+        }
+    });
+
+    /*]]>*/
+
+</script>
+<script>
+
+    // 모달창을 닫는 함수
+    function closeModal() {
+        document.getElementById("detailModal").style.display = "none";
+    }
+
+    // 서비스 다중 선택 처리
+    let selectedServices = [];
+
+    // 원하는 서비스 다중 선택 처리
+    function selectOption(event, option) {
+        const serviceButton = event.target; // 클릭된 버튼
+        const serviceButtonText = serviceButton.textContent.trim(); // 버튼 텍스트(서비스 이름)
+
+        // "공항픽업" 선택 시 다른 서비스 선택 불가능하게 처리
+        if (option === 5) {
+            // "공항픽업"을 선택한 경우
+            if (!selectedServices.includes(5)) {
+                // "공항픽업"이 선택되지 않았다면 배열 초기화
+                selectedServices = [5];
+                // 모든 버튼 비활성화 후 "공항픽업" 활성화
+                document.querySelectorAll('.options button').forEach(button => {
+                    button.classList.remove('selected');
+                });
+                serviceButton.classList.add('selected'); // "공항픽업" 버튼 스타일 변경
+            } else {
+                // 이미 "공항픽업" 선택 시 제거
+                selectedServices = [];
+                serviceButton.classList.remove('selected'); // "공항픽업" 선택 해제
+            }
+        } else {
+            // 다른 서비스를 선택한 경우 "공항픽업"이 이미 선택되었는지 확인
+            if (selectedServices.includes(5)) {
+                alert("공항픽업을 선택한 경우 다른 서비스는 선택할 수 없습니다.");
+                return; // 선택 취소
+            }
+
+            // 선택된 서비스가 배열에 이미 있는지 확인
+            const index = selectedServices.indexOf(option);
+            if (index === -1) {
+                // 선택되지 않은 경우 배열에 추가
+                selectedServices.push(option);
+                serviceButton.classList.add('selected'); // 버튼 스타일 변경
+            } else {
+                // 이미 선택된 경우 배열에서 제거
+                selectedServices.splice(index, 1);
+                serviceButton.classList.remove('selected'); // 버튼 스타일 제거
+            }
+        }
+
+        // 선택된 서비스들을 화면에 표시
+        updateSelectedServices();
+    }
+
+    // 선택된 서비스 목록을 화면에 갱신
+    function updateSelectedServices() {
+        const anotherSelectedDiv = document.getElementById('anotherSelectedOption');
+
+        // 화면에 표시할 서비스 이름 설정
+        const serviceNames = {
+            1: "산책",
+            2: "목욕",
+            3: "미용",
+            4: "병원",
+            5: "공항픽업",
+        };
+
+        // 선택된 서비스들을 화면에 표시
+        const selectedServiceHTML = selectedServices.map(id => {
+            return `<span class="service">${serviceNames[id]} <button class="remove-service" data-service="${id}">×</button></span>`;
+        }).join(', ');
+
+        // 선택된 서비스들을 '추가된 서비스' 영역에만 표시
+        anotherSelectedDiv.innerHTML = selectedServiceHTML;
+
+        // 다중 선택된 서비스 값들을 숨겨진 input에 쉼표로 구분하여 저장
+        document.getElementById('bService').value = selectedServices.join(',');
+
+        // 선택된 서비스 콘솔 출력
+        console.log('선택된 서비스들:', selectedServices);
+    }
+
+    // 예약 시간 선택
+    document.querySelectorAll('.options2 .option2').forEach(button => {
+        button.addEventListener('click', function() {
+            const option = this.getAttribute('data-option'); // data-option 속성 값 가져오기
+
+            // 버튼을 모두 비활성화 상태로 초기화
+            const buttons = document.querySelectorAll('.options2 .option2');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // 선택된 버튼에 active 클래스 추가
+            this.classList.add('active');
+
+            // 선택된 시간 값을 hidden input에 설정
+            document.getElementById('bTime').value = option;
+            console.log('선택된 예약 시간:', option);
+        });
+    });
+
+    // 다음 주소 API
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                // 도로명 주소 또는 지번 주소 선택
+                if (data.userSelectedType === 'R') {
+                    addr = data.roadAddress;  // 도로명 주소
+                } else {
+                    addr = data.jibunAddress;  // 지번 주소
+                }
+
+                // 도로명 주소에 "인천"이 포함되어 있는지 체크
+                if (addr.indexOf("인천") === -1) {
+                    alert("인천에 해당하는 주소만 검색할 수 있습니다.");
+                    return; // "인천"이 포함되지 않은 주소는 검색 종료
+                }
+
+                // 인천 지역일 경우, 주소를 입력
+                document.getElementById("bSample6_address").value = addr;
+                // document.getElementById("bSample6_detailAddress").focus();
+            }
+        }).open();
+    }
+
+    // 주소 합치기
+    $('#bSubmitForm').click(() => {
+        let Guardian_Address = $('#Guardian_Address');
+
+        let addr1 = $('#bSample6_address').val();
+        // let addr2 = $('#bSample6_detailAddress').val();
+
+        Guardian_Address.val(`${addr1}`);
+        // 인천시 미추홀구 매소홀로 6-32, 태승빌딩 5층
+
+        bModifyForm.submit();
+
+    });
+
+    //유저 프로파일 미리보기
+    $('#B_File').on('change', function (event) {
+        let file = event.target.files[0];  // 선택한 파일
+        console.log(file);  // 파일 객체가 잘 읽혔는지 확인
+        if (file) {
+            let reader = new FileReader();  // FileReader 생성
+
+            reader.onload = function (e) {
+                console.log(e.target.result);  // 읽힌 파일의 URL을 콘솔로 출력하여 확인
+                $('#preImage').attr('src', e.target.result);  // 미리보기 이미지
+            };
+
+            // 파일을 Base64 데이터 URL로 변환
+            reader.readAsDataURL(file);  // FileReader가 Base64로 변환
+        } else {
+            console.log('파일이 선택되지 않았습니다');
+        }
+    });
+
+
+    // 연락처 입력 필드에 숫자만 입력되도록 제한
+    $("#Guardian_Phone").on("input", function () {
+        var value = $(this).val();
+        var sanitizedValue = value.replace(/[^0-9]/g, ""); // 숫자 이외의 문자 제거
+        $(this).val(sanitizedValue);
+
+        // 연락처 유효성 검사 (010을 포함하여 검사)
+        if (!/^[0-9]{8}$/.test(phone) || phone.length !== 11) {
+            alert("연락처를 010으로 시작하는 11자리 숫자(-없이)로 입력해주세요.");
+
+        }
+    });
+
+</script>
+
+</body>
+</html>
