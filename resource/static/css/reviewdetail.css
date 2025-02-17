@@ -1,0 +1,163 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+#bBody {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 스크롤을 숨기기 */
+}
+
+#whole-container {
+    max-width: 85vw;
+    margin: 0 auto; /* To center the container horizontally if needed */
+    min-height: 100vh;
+    display: flex; /* Make container a flexbox container */
+    justify-content: center; /* Center content horizontally */
+    /*align-items: center; !* Center content vertically *!*/
+}
+
+
+#modiForm1 {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    margin-top: 80px;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        height: 500px;
+    display: flex;
+    overflow: hidden;  /* 화면을 넘는 내용은 숨기기 */
+}
+
+.rating {
+    display: flex;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.rating span {
+    margin-right: 5px;
+    color: #ddd; /* 기본 회색 */
+}
+
+.rating span.select {
+    color: gold; /* 선택된 별은 금색 */
+}
+
+.stars {
+    display: flex;
+    justify-content: flex-start;
+    cursor: pointer;
+}
+
+.stars i {
+    font-size: 30px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.stars i.active {
+    color: #FFD700; /* 별을 황금색으로 */
+}
+
+.stars i:hover {
+    color: #FFD700; /* hover시 별 색상 */
+}
+
+#rating {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.star {
+    font-size: 24px;
+    color: #d3d3d3; /* 비활성화된 별 */
+    cursor: pointer;
+}
+
+.star.select,
+.star.active {
+    color: gold; /* 활성화된 별 */
+}
+
+button img, #list img {
+    width: 20px;
+    height: 20px;
+}
+
+/* 상단 내용과 이미지 */
+.content-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 50px; /* 하단 버튼 공간 확보 */
+    overflow: hidden;
+}
+
+/* 상단 이미지 및 텍스트 */
+.top-content {
+    display: flex;
+    flex-grow: 1;
+    overflow-y: auto; /* 내용이 넘치면 세로로 스크롤 가능 */
+}
+
+/* 이미지 스타일 */
+.rev-image {
+    width: 300px;
+    margin-right: 20px; /* 이미지와 내용 사이 여백 */
+    margin-left: 40px;
+    flex: 1;
+}
+
+/* 내용 스타일 */
+.rev-content {
+    flex-grow: 1;
+}
+
+/* 버튼들을 하단에 고정 */
+.button-container {
+    position: sticky;
+    bottom: 0;
+    padding: 10px;
+    text-align: center;
+    z-index: 1000; /* 다른 요소들 위에 표시되도록 */
+}
+
+/* 버튼 스타일 */
+.button-container button {
+    margin: 0 10px;
+}
+
+
+/* header-container는 제목과 버튼들을 포함하는 부모 컨테이너 */
+.header-container {
+    display: flex;
+    justify-content: space-between; /* 제목은 왼쪽, 버튼은 오른쪽 끝 */
+    align-items: flex-start;  /* 제목과 버튼들이 수평 정렬되도록 */
+    padding: 10px 20px; /* 상단 여백 */
+    width: 100%; /* 부모 컨테이너가 화면을 가득 채우도록 */
+}
+
+/* 제목 스타일 */
+.header-container h1 {
+    margin: 0;
+    white-space: nowrap; /* 제목이 줄 바꿈 없이 한 줄로 표시되게 설정 */
+}
+
+/* 버튼 그룹을 오른쪽 끝에 배치 */
+.button-groups {
+    display: flex;
+    align-items: center; /* 버튼들을 수평으로 배치 */
+    margin-right: 20px;
+}
+
+.button-groups button {
+    margin-left: 10px; /* 버튼 간 간격 */
+}

@@ -1,0 +1,133 @@
+
+body {
+    font-family: 'Jua', sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+header {
+text-align: center;
+    height: 60px;
+    padding: 10px 0;
+    background-color: white;
+}
+
+.main-banner img {
+    width: 60%;
+    padding: 50px 20px;
+}
+
+
+.content {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.content h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.content p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.slider-wrapper {
+    width: 800px; /* 한 번에 3개씩 보이도록 설정 */
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.dog-slider {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+}
+
+.slider-item {
+    position: relative;
+    margin-right: 10px; /* 이미지 간격 조정 */
+    flex-shrink: 0;
+}
+
+.slider-item img {
+    width: 125px;
+    height: 125px;
+    padding: 10px;
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: filter 0.3s ease-in-out; /* 흐리게 변화 */
+}
+
+/* 호버 시 텍스트가 가운데에 보이도록 */
+.slider-item .name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out; /* 호버시 이름이 보이도록 */
+}
+
+.slider-item:hover img {
+    filter: blur(5px); /* 이미지 흐리게 */
+}
+
+.slider-item:hover .name {
+    opacity: 1; /* 호버시 이름 보이기 */
+}
+
+button {
+    background-color: #FFCC00;
+    border: none;
+    font-size: 24px;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+button:hover {
+    background-color: #FFA500;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background-color: #f4a261;
+    color: white;
+}

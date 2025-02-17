@@ -1,0 +1,455 @@
+#bBody {
+
+    text-align: center;
+
+}
+
+.board1 {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.btn-board-form {
+    background: #2b3569;
+    font-family: inherit;
+    padding: 0.6em 1.3em;
+    font-weight: 900;
+    font-size: 12px;
+    border: 3px solid white;
+    border-radius: 15px;
+    box-shadow: 0.1em 0.1em #2b3569;
+    cursor: pointer;
+    margin-right: 0;
+    color: white;
+    gap: 20px;
+}
+
+#row {
+    border-radius: 15px;
+    background-color: #ffffff;
+    width: 1200px;
+    height: 80%;
+    text-align: center;
+    margin: 0 auto; /* 가로 중앙 정렬 */
+    padding: 20px;
+}
+
+/* 태우다 게시판 css */
+
+/* 게시글 카드 컨테이너 */
+#board-album {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+}
+
+/* 게시글 카드 */
+.board-card {
+    /*border: 1px solid #ddd;*/
+    /*border-radius: 8px;*/
+    overflow: hidden;
+    background-color: #fff;
+    text-align: center;
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.board-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 썸네일 이미지 */
+.thumbnail img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* 게시글 내용 */
+.content {
+    padding: 10px;
+}
+
+.content .title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 8px 0;
+    display: block;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.content .title:hover {
+    color: #007BFF;
+}
+
+.content .author {
+    font-size: 14px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* 페이징 */
+#paging {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#paging a {
+    margin: 0 5px;
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#paging .iNum {
+    margin: 0 5px;
+    font-weight: bold;
+}
+
+#paging .prev,
+#paging .next {
+    color: #999;
+}
+
+#paging a:hover {
+    text-decoration: underline;
+}
+
+
+#input {
+    width: 300px;
+    height: 80%;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    caret-color: rgb(255, 81, 0);
+}
+
+
+#boardsearchform {
+    text-align: left;
+    margin-left: 50px;
+    margin-top: 30px;
+}
+
+.labelforsearch {
+    cursor: text;
+    padding: 0px 12px;
+}
+
+#searchIcon {
+    width: 13px;
+
+}
+
+.border {
+    height: 40%;
+    width: 1.3px;
+    background-color: rgb(223, 223, 223);
+}
+
+.micIcon {
+    width: 12px;
+}
+
+.micButton {
+    padding: 0px 15px 0px 12px;
+    border: none;
+    background-color: transparent;
+    height: 40px;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+#searchbtn {
+    height: 80%;
+    border-style: hidden;
+    background: none;
+}
+
+#searchIcon path {
+    fill: rgb(114, 114, 114);
+}
+
+.micIcon path {
+    fill: rgb(255, 81, 0);
+}
+
+.micButton:hover {
+    background-color: rgb(255, 230, 230);
+    transition-duration: 0.3s;
+}
+
+.divider {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 15px;
+    line-height: 1.5;
+    padding-bottom: 10px;
+}
+
+.divider span {
+    margin: 0 10px;
+}
+
+
+.form-control custom-input {
+    width: 300px;
+    height: 80%;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    caret-color: rgb(255, 81, 0);
+}
+
+.search-wrapper {
+    display: flex;
+    align-items: center; /* Vertically centers the items */
+    justify-content: center; /* Horizontally centers the items */
+    gap: 10px; /* Optional: Adjusts the space between the elements */
+}
+
+#category {
+    border: none;
+    padding: 10px;
+}
+
+.ui-input-container {
+    position: relative;
+    width: 300px;
+}
+
+.ui-input {
+    width: 100%;
+    padding: 10px 10px 10px 10px;
+    font-size: 1em;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    outline: none;
+    background-color: transparent;
+    transition: border-color 0.3s;
+    margin: auto 0;
+}
+
+.ui-input:focus {
+    border-color: #ffd5d5;
+}
+
+.ui-input-icon button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+
+.ui-input-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background-color: #ffd5d5;
+    transform: scaleX(0);
+    transition: transform 0.3s;
+}
+
+.ui-input:focus + .ui-input-underline {
+    transform: scaleX(1);
+}
+
+.ui-input-highlight {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background-color: rgba(255, 213, 213, 0.2);
+    transition: width 0.3s;
+}
+
+.ui-input:focus ~ .ui-input-highlight {
+    width: 100%;
+}
+
+.ui-input-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #cccccc;
+    transition: color 0.3s;
+}
+
+.ui-input:focus ~ .ui-input-icon {
+    color: #ffd5d5;
+}
+
+.ui-input-icon svg {
+    width: 20px;
+    height: 20px;
+    transition: stroke 0.3s;
+}
+
+.ui-input:focus ~ .ui-input-icon svg path {
+    stroke: #ffd5d5;
+}
+
+#bWriteModal {
+    display: none; /* 기본적으로 숨겨져 있음 */
+    gap: 15px;
+    background-color: #ffffff;
+    padding: 20px;
+    width: 500px;
+    height: 700px; /* 고정 높이 */
+    border-radius: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* 모달 위에 뜨게! */
+    overflow-y: auto; /* ✨ 스크롤 되게! ✨ */
+    scrollbar-width: none; /* Firefox 스크롤바 숨김 */
+
+    display: flex; /* ✨ Flexbox 레이아웃 다시 쓴다! ✨ */
+    flex-direction: column; /* ✨ 모달 전체는 세로 배치 유지! ✨ */
+}
+
+/* label 스타일 */
+#bWriteModal .form-content label {
+    display: inline-block; /* ✨ block 대신 inline-block! ✨ */
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    width: auto; /* ✨ 너비 자동으로! ✨ */
+    margin-right: 10px;
+    text-align: left;
+    vertical-align: top; /* ✨ label 텍스트 위쪽 정렬! ✨ */
+    border-left: solid 3px black;
+    padding-left: 5px;
+}
+
+/* input, select, textarea 스타일 */
+#bWriteModal .form-content input[type="text"],
+#bWriteModal .form-content input[type="tel"],
+#bWriteModal .form-content select,
+#bWriteModal .form-content textarea {
+    display: inline-block; /* ✨ 얘네도 inline-block! ✨ */
+    width: calc(100% - 150px); /* ✨ input 너비 줄여서 label 옆에 공간 확보! ✨ */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+    vertical-align: top; /* ✨ input 텍스트 위쪽 정렬! ✨ */
+}
+
+#bSubmitForm, #cancel {
+    padding: 12px 20px;
+    background-color: #6287a6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#bSubmitForm:hover {
+    background-color: #85b5d6;
+}
+
+#cancel {
+    background-color: #6287a6;
+}
+
+#cancel:hover {
+    background-color: #85b5d6;
+}
+
+#contents {
+    margin-bottom: 10px;
+}
+
+#button {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* 버튼 간격 조정 */
+}
+
+.options1 {
+    padding-left: 10px;
+    margin: 5px;
+}
+
+.option1.active {
+    background-color: #85b5d6; /* 선택된 버튼은 초록색 */
+    color: white;
+    border-color: #85b5d6; /* 경계선도 초록색으로 */
+}
+
+/* 모달 배경 */
+#passwordModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 200px;
+    background-color: white; /* 반투명 배경 */
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* 모달 콘텐츠 */
+#passwordModal div {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+}
+
+/* 입력 필드 스타일 */
+#passwordModal input[type="password"] {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* 버튼 스타일 */
+#passwordModal button {
+    width: 80%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+#passwordModal button:hover {
+    background-color: #0056b3;
+}
+
+/* 오류 메시지 스타일 */
+#errorMessage {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    display: none;
+}

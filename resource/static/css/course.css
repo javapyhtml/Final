@@ -1,0 +1,196 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+/* 전체 컨테이너 레이아웃 */
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* 사이드바 스타일 */
+.sidebar {
+    width: 450px;
+    background-color: #f9f9f9;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* padding, border가 width, height에 포함되도록 */
+}
+
+/* 고정 정보 섹션 스타일 */
+.info-section h4,
+.memo-section h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.info-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.info-section ul li {
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* 접이식 검색 섹션 */
+.search-section {
+    margin-top: 20px;
+}
+
+.search-section summary {
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.search-section .button-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.search-section input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+/* 지도 컨테이너 */
+#map {
+flex: 1;
+    height: 100vh;
+    margin-right: 0;
+    overflow: hidden;
+}
+
+/* 사이드바 초기 숨김 상태 */
+.search-sidebar {
+    width: 450px; /* 원하는 너비로 설정 */
+    height: 100%;
+    background-color: #f0f0f0; /* 배경색 */
+    position: fixed;
+    top: 0;
+    right: -450px; /* 화면 밖으로 숨김 */
+    z-index: 1000; /* 다른 요소 위에 표시 */
+    transition: right 0.3s ease-in-out; /* 부드러운 애니메이션 */
+    padding: 20px; /* 내용과의 간격 */
+    box-sizing: border-box; /* padding, border가 width, height에 포함되도록 */
+}
+
+.search-sidebar.open {
+    left: 0; /* 화면 안으로 나타나도록 */
+}
+
+#toggleSidebarButton {
+    position: fixed;
+    top: 10px; /* 버튼 위치 조정 */
+    left: 10px; /* 버튼 위치 조정 */
+    z-index: 1001; /* 사이드바 위에 표시 */
+    background-color: #ddd;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out; /* 회전 애니메이션 */
+}
+
+#toggleSidebarButton.collapsed {
+    transform: rotateX(180deg); /* 닫힌 상태일 때 화살표 방향 */
+}
+
+#nodeList1 button {
+    display: none;
+}
+
+.node-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.node-header {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.node-header .badge {
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.node-details {
+    margin-bottom: 10px;
+}
+
+.node-row {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.node-footer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.delete-node-button {
+    padding: 5px 10px;
+}
+/* 입력창의 상단 여백 */
+#searchInput {
+    margin-top: 30px;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    box-sizing: border-box; /* padding 포함한 너비 계산 */
+}
+
+/* 버튼들이 한 줄로 정렬되도록 스타일 */
+#searchButton,
+#hospitalButton,
+#groomingButton,
+#bathButton,
+#airportButton {
+    width: 16%; /* 5개의 버튼이 동일한 너비를 가질 수 있도록 */
+    padding: 10px;
+    font-size: 16px;
+    margin: 5px; /* 버튼 간격 */
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-block; /* 한 줄에 정렬 */
+}
+
+/* 부모 요소에 flexbox 적용하여 버튼들이 한 줄로 정렬되도록 */
+div#buttonContainer {
+    display: flex;
+    justify-content: space-between; /* 버튼 사이에 공간을 고르게 */
+}
+

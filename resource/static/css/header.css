@@ -1,0 +1,423 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    padding: 5px;
+    display: flex; /* 플렉스 컨테이너 */
+    justify-content: space-between; /* 양쪽 정렬 */
+    align-items: center; /* 세로 축 중앙 정렬 */
+    background-color: #fff; /* 배경 흰색 */
+}
+
+.nav-center {
+    display: flex; /* 플렉스 컨테이너 */
+    justify-content: center; /* 중앙 정렬 */
+    flex-grow: 1; /* 공간을 균등 분배 */
+    gap: 30px; /* 각 항목 간격 줄이기 */
+}
+
+header a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: black; /* 텍스트 색상 */
+    font-weight: bold; /* 텍스트 굵게 */
+    margin: 0 10px; /* 좌우 간격 추가 */
+    font-size: 16px; /* 글씨 크기 조정 */
+}
+
+.auth-buttons {
+    display: flex; /* 로그인/회원가입 버튼 정렬 */
+    gap: 15px; /* 버튼 간격 */
+}
+
+.auth-buttons a {
+    font-size: 14px; /* 버튼 크기 축소 */
+    padding: 5px 10px; /* 버튼 내부 여백 */
+    border: 1px solid #A6A6A6; /* 버튼 테두리 */
+    border-radius: 5px; /* 버튼 둥글게 */
+    text-decoration: none; /* 밑줄 제거 */
+    color: black; /* 버튼 텍스트 색상 */
+    transition: background-color 0.3s ease; /* 호버 애니메이션 */
+}
+
+.auth-buttons a:hover {
+    background-color: #f0f0f0; /* 호버 시 배경색 변경 */
+}
+
+
+
+/* 모달의 기본 스타일 */
+/* 모달 기본 스타일 */
+#petModal {
+    display: none; /* 기본적으로 숨겨져 있음 */
+    flex-direction: column;
+    gap: 10px;
+    background-color: #ffffff;
+    padding: 20px;
+    width: 450px;
+    height: 700px;
+    border-radius: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* 모달이 다른 콘텐츠 위에 표시되도록 설정 */
+}
+
+#loginModal {
+    display: none; /* 기본적으로 숨겨져 있음 */
+    flex-direction: column;
+    gap: 10px;
+    background-color: #ffffff;
+    padding: 20px;
+    width: 300px;
+    height: 250px;
+    border-radius: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* 모달이 다른 콘텐츠 위에 표시되도록 설정 */
+}
+
+#joinModal {
+    display: none; /* 기본적으로 숨겨져 있음 */
+    flex-direction: column;
+    gap: 10px;
+    background-color: #ffffff;
+    width: 500px;
+    height: 900px;
+    border-radius: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10000; /* 모달이 다른 콘텐츠 위에 표시되도록 설정 */
+}
+
+
+#joinModalLabel, #loginModalLabel, #petModalLabel {
+    text-align: center;
+}
+
+/* 배경 흐리게 만들기 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 검은색 배경 */
+    backdrop-filter: blur(5px); /* 배경 흐림 효과 */
+    z-index: 100; /* 모달 아래에 배경이 표시되도록 설정 */
+    display: none;
+}
+
+#termModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101; /* 모달은 오버레이 위에 있어야 하므로 101 */
+    display: none; /* 기본적으로 숨김 */
+    background-color: #fff;
+    border-radius: 8px; /* 모서리 둥글게 처리 */
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+}
+
+#joinForm {
+    height: 800px;
+}
+
+/* 모달이 열린 상태일 때 */
+.modal.open {
+    display: flex; /* 모달을 보이게 만듦 */
+}
+
+/* 배경이 흐릿해진 오버레이가 보이게 할 때 */
+.modal.open + .modal-overlay {
+    display: block;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10px auto;
+    width: 90%;
+    max-width: 500px;
+    max-height: 800px;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* 항목 사이 간격 */
+}
+
+/* 입력 필드 스타일 */
+.modal-body label {
+    font-size: 1rem;
+    margin-right: 40px;
+}
+
+.modal-body input[type="text"],
+.modal-body input[type="password"] {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 90%;
+}
+
+#User_Email_Local {
+    width: 40%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 로그인 버튼 스타일 */
+#submitForm, #resetForm {
+    padding: 10px 20px;
+    width: 100px;
+    background-color: #6287a6;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    bottom: 10%;
+    left: 50%;
+}
+
+#login, #pet {
+    padding: 10px 20px;
+    width: 100px;
+    background-color: #6287a6;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 40px;
+    position: absolute; /* 절대 위치 지정 */
+    bottom: 10px; /* 모달 하단에서 10% 위치 */
+    left: 50%; /* 수평 중앙에 배치 */
+    transform: translateX(-50%); /* 정확한 중앙 정렬 */
+}
+
+
+#login:hover, #submitForm:hover, #resetForm:hover {
+    background-color: #85b5d6;
+}
+
+
+/* 선택된 버튼 스타일 */
+.option.active {
+    background-color: #85b5d6; /* 강조 색상 */
+    color: white;
+    border: none;
+}
+
+/* 기본 버튼 스타일 */
+.options button {
+    background-color: #6287a6; /* 기본 색상 */
+    border: 1px solid #6287a6;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+.options button:hover {
+    background-color: #85b5d6; /* 마우스 오버 효과 */
+}
+
+/* 선택된 값 표시 숨기기 */
+.selected {
+    display: none;
+}
+
+/* 체크박스 영역 스타일 */
+.check-all {
+    margin: auto;
+    padding: 10px;
+    border-bottom: 1px solid #353537;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+
+.checkbox input {
+    margin-right: 10px;
+    accent-color: #2b3569;
+    width: 20px;
+    height: 20px;
+}
+
+.checkbox span {
+    display: inline-block;
+    font-size: 18px;
+}
+
+/* 리스트 항목 스타일 */
+.list {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+.content, .content-inner {
+    display: block; /* block으로 변경하여 다음 요소가 아래에 오게 함 */
+    padding: 15px 0;
+    /*border-bottom: 1px solid #eee;*/
+    margin: 20px 0;
+}
+
+/* 버튼 박스 */
+.content .btnBox, .btnBox {
+    background-color: #2b3569;
+    width: 100px;
+    height: 80%;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.content .btnBox:hover, .btnBox:hover {
+    background-color: rgb(120, 140, 170);
+}
+
+/* 마케팅 체크박스 스타일 */
+.marketing-check {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;  /* 각 항목이 한 줄에 두 개씩 배치되도록 설정 */
+    flex-wrap: wrap;
+    gap: 20px;  /* 항목 간 간격 */
+}
+
+.marketing-check li {
+    flex: 1 1 45%; /* 각 항목이 한 줄에 두 개씩 배치되도록 비율 설정 */
+    list-style-type: none;
+}
+
+.marketing-check .checkbox {
+    font-size: 14px;
+}
+
+.marketing-check .checkbox input[type="checkbox"]:checked {
+    accent-color: #2b3569;
+}
+
+.marketing-check .checkbox input[type="checkbox"] {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+.marketing-check .checkbox span {
+    font-size: 14px;
+    color: #353537;
+    cursor: pointer;
+}
+
+.marketing-check .checkbox span:hover {
+    color: #2b3569;
+}
+
+/* 나이 확인 체크박스 스타일 */
+.check-age {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+}
+
+/* 버튼 스타일 */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+}
+
+#term-agree-btn, #term-cancel-btn {
+    background-color: #2b3569;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+#term-agree-btn:hover, #term-cancel-btn:hover {
+    background-color: rgb(120, 140, 170);
+}
+
+/* textarea 스타일 */
+textarea {
+    margin-top: 10px;
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #d8d9df;
+    font-size: 12px;
+    color: #98989f;
+    line-height: 1.6em;
+    overflow: auto;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+/*.change1 {*/
+/*    background-color: #6287a6; !* 기본 색상 *!*/
+/*    border: 1px solid #6287a6;*/
+/*    border-radius: 4px;*/
+/*    padding: 5px 10px;*/
+/*    margin: 5px;*/
+/*    cursor: pointer;*/
+/*    color: white;*/
+/*}*/
+
+/*.change1 :hover {*/
+/*    background-color: #85b5d6;*/
+/*}*/
+
+/*.change2 {*/
+/*    background-color: #795000; !* 기본 색상 *!*/
+/*    border: 1px solid #795000;*/
+/*    border-radius: 4px;*/
+/*    padding: 5px 10px;*/
+/*    margin: 5px;*/
+/*    cursor: pointer;*/
+/*    color: white;*/
+/*}*/
+
+/*.change2 :hover {*/
+/*    background-color: #bc7f00;*/
+/*}*/

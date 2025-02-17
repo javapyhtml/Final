@@ -1,0 +1,138 @@
+/* 공통 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    color: #333;
+}
+
+
+.hero {
+    position: relative;
+    background-image: url('/images/bannercat3.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 500px; /* 섹션 높이 지정 */
+}
+
+.hero div {
+    max-width: 600px;
+    margin-left: 30%; /* 텍스트를 화면 중앙으로 약간 이동 */
+    z-index: 2;
+}
+
+.hero h1 {
+    font-size: 2em;
+    margin: 0;
+    text-align: center;
+}
+
+.hero p {
+    margin: 20px 0;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+/* 주요 특징 섹션 스타일 */
+.features {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #fff;
+}
+
+.features h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+.feature-list {
+    display: flex;
+    justify-content: center; /* 중앙 정렬 */
+    flex-wrap: wrap; /* 화면 크기에 따라 줄바꿈 */
+    gap: 15px; /* 상자 사이의 간격을 좁게 설정 */
+    max-width: 1200px; /* 컨테이너 너비 제한 */
+    margin: 0 auto; /* 컨테이너를 화면 중앙에 배치 */
+}
+
+.feature-item {
+    width: 200px;
+    text-align: center;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.feature-item img {
+    width: 100px; /* 이미지 크기 */
+    margin-bottom: 15px;
+}
+
+.feature-item h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.feature-item p {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+
+
+/* 전체 캐러셀 스타일 */
+.sitters-carousel {
+    margin: 0 auto;
+    text-align: center;
+    background-color: #fea443;
+    padding: 40px 20px;
+}
+
+
+.carousel-wrapper {
+    position: relative;
+    overflow: hidden; /* 화면 밖의 슬라이드 감춤 */
+    width: 1200px; /* 483px × 3 = 1449px (이미지 3개 너비) */
+    margin: 0 auto;
+    padding: 0 60px; /* 왼쪽/오른쪽에 빈 공간 추가 */
+    box-sizing: border-box;
+}
+
+/* 캐러셀 내부 슬라이드 */
+.carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* 슬라이드 전환 애니메이션 */
+    gap: 10px; /* 카드 사이 간격 */
+    will-change: transform;
+}
+
+/* 각 프로필 카드 */
+.sitter-profile {
+    flex-shrink: 0; /* 슬라이드 크기 고정 */
+    width: 383px; /* 이미지의 고정 너비 */
+    text-align: center;
+
+}
+
+.sitter-profile img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    display: block;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #fea443;
+}
+

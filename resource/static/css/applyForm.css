@@ -1,0 +1,52 @@
+#bBody {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 화면 전체 높이를 사용 */
+    width: 100vw; /* 화면 전체 폭을 사용 */
+    margin: 0; /* 여백 제거 */
+}
+
+table {
+    border-radius: 15px;
+    background-color: #fff;
+    width: 700px;
+    height: 700px;
+    text-align: center;
+    box-shadow: 0 5px 15px 0 #00000026;
+}
+
+tr {
+    /*margin-top: 60px;*/
+    text-align: center;
+}
+
+th {
+    text-align: left;
+    padding-left: 50px;
+}
+
+td {
+    text-align: left;
+    padding-left: 20px;
+}
+
+input {
+    padding: 10px;
+    border: none;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #9dc3e6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+button:hover {
+    background-color: #5fa2e1;
+    font-weight: bold;
+}

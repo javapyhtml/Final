@@ -1,0 +1,149 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.hero {
+    position: relative;
+    background-image: url('/images/banner2.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 50px; /* 좌우 패딩 추가 */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 텍스트를 중앙 정렬 */
+    height: 400px; /* 섹션 높이 지정 */
+}
+
+.hero div {
+    max-width: 600px;
+    text-align: center; /* 텍스트 중앙 정렬 */
+    z-index: 2;
+}
+
+.hero h1 {
+    font-size: 3em;
+    margin: 0;
+}
+
+.hero p {
+    margin: 20px 0;
+    font-size: 1.2em;
+}
+
+.service {
+    display: flex;
+    flex-direction: column; /* 세로로 나열 */
+    align-items: center; /* 중앙 정렬 */
+    gap: 40px; /* 각 항목 간 간격 */
+    padding: 40px;
+}
+
+/* 기존 CSS 유지 */
+
+.service-item {
+    display: flex; /* 이미지와 텍스트를 가로로 배치 */
+    align-items: center; /* 세로축 중앙 정렬 */
+    justify-content: space-between; /* 이미지와 텍스트 사이 간격 유지 */
+    max-width: 800px; /* 서비스 아이템의 최대 너비 */
+    width: 100%; /* 부모 요소 너비에 맞춤 */
+    gap: 20px; /* 이미지와 텍스트 간격 */
+}
+
+.service-item img {
+    width: 180px; /* 이미지 크기 */
+    height: auto; /* 비율에 맞게 자동 조정 */
+    object-fit: contain; /* 이미지 비율 유지 */
+}
+
+.service-item .text {
+    width: 60%; /* 텍스트 박스의 너비를 일정하게 설정 */
+    text-align: left; /* 텍스트 왼쪽 정렬 */
+}
+
+/* 기본적으로 이미지는 왼쪽, 텍스트는 오른쪽 */
+.service-item:nth-child(odd) {
+    flex-direction: row; /* 이미지 왼쪽, 텍스트 오른쪽 */
+}
+
+/* reverse 클래스를 추가하여 이미지를 오른쪽에 배치 */
+.service-item.reverse {
+    flex-direction: row-reverse; /* 이미지 오른쪽, 텍스트 왼쪽 */
+}
+
+.price {
+    width: 1800px;
+}
+
+.table-container {
+    width: 80%;
+    max-width: 900px;
+    margin: auto;
+    overflow-x: auto;
+}
+
+.price-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    border: 1px solid #ccc;
+    margin: auto;
+    background-color: #fff;
+}
+
+.price-table th, .price-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.price-table th {
+    background-color: #A6A6A6;
+    font-weight: bold;
+}
+
+.price-table td {
+    background-color: #fff;
+}
+
+.price-table tr:nth-child(even) td {
+    background-color: #d6d6d9;
+}
+
+.price-table thead th {
+    background-color: #A6A6A6;
+    font-size: 16px;
+}
+
+
+
+.notice {
+    text-align: center; /* 공지사항 텍스트 중앙 정렬 */
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa; /* 연한 배경색 추가 */
+    border-radius: 10px; /* 둥근 테두리 */
+    /*width: 1200px;*/
+}
+
+.notice ul {
+    list-style: none; /* 불릿 제거 */
+    padding: 0;
+}
+
+.notice ul li {
+    margin: 10px 0; /* 항목 간격 */
+    text-align: center;
+}
+
+h2 {
+    color: #222;
+    border-bottom: 3px solid #0071BC;
+    display: inline-block;
+    padding-bottom: 5px;
+}

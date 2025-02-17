@@ -1,0 +1,107 @@
+
+.rBody {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 화면 전체 높이를 사용 */
+    width: 100vw; /* 화면 전체 폭을 사용 */
+    margin: 0; /* 여백 제거 */
+}
+
+
+table {
+    border-radius: 15px;
+    background-color: #fff;
+    width: 700px;
+    height: 700px;
+    text-align: center;
+    box-shadow: 0 5px 15px 0 #00000026;
+}
+
+tr {
+    margin-top: 60px;
+    text-align: center;
+}
+
+th {
+    text-align: left;
+    padding-left: 50px;
+}
+
+td {
+    text-align: left;
+    padding-left: 20px;
+}
+
+.rating {
+    display: flex;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.rating span {
+    margin-right: 5px;
+    color: #ddd; /* 기본 회색 */
+}
+
+.rating span.selected {
+    color: gold; /* 선택된 별은 금색 */
+}
+
+.stars {
+    display: flex;
+    justify-content: flex-start;
+    cursor: pointer;
+}
+
+.stars i {
+    font-size: 30px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.stars i.active {
+    color: #FFD700; /* 별을 황금색으로 */
+}
+
+.stars i:hover {
+    color: #FFD700; /* hover시 별 색상 */
+}
+
+#rating {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.star {
+    font-size: 30px;
+    color: #ccc;  /* 기본 빈 별 색 */
+}
+
+.star.selected {
+    color: gold;  /* 선택된 별 색 */
+}
+
+#cmtWrite {
+    margin-top: 20px; /* 테이블과 댓글 작성 버튼 사이에 여백을 줍니다 */
+    padding: 10px;
+}
+
+#cmtWrite textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+#cmtWrite button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#cmtWrite button:hover {
+    background-color: #0056b3;
+}
+

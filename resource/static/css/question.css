@@ -1,0 +1,81 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f9f9f9;
+}
+
+.hero {
+    position: relative;
+    background-image: url('/images/banner4.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 50px; /* 좌우 패딩 추가 */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 텍스트를 중앙 정렬 */
+    height: 400px; /* 섹션 높이 지정 */
+}
+
+.hero div {
+    max-width: 600px;
+    text-align: center; /* 텍스트 중앙 정렬 */
+    z-index: 2;
+}
+
+.hero h1 {
+    font-size: 3em;
+    margin: 0;
+}
+
+.hero p {
+    margin: 20px 0;
+    font-size: 1.2em;
+}
+
+.faq-container {
+
+    max-width: 600px;
+ margin: 30px auto;
+}
+
+.faq-item {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.faq-question {
+    width: 100%;
+    text-align: left;
+    padding: 15px;
+    font-size: 16px;
+    background-color: #f1f1f1;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-question:focus {
+    outline: none;
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+}
+
+.faq-question.active .arrow {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    padding: 15px;
+    display: none;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+}

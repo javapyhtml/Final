@@ -1,0 +1,145 @@
+/* 전체 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #333333;
+    line-height: 1.5;
+}
+
+/* 헤더 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff4f59;
+    margin-right: 20px;
+}
+
+/* 검색 바 */
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-input, .location-select, .search-button {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.header-right .login-button, .header-right .friendship-button {
+    font-size: 14px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.friendship-button {
+    background-color: #ff4f59;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+/* Hero 섹션 */
+.hero {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f7f7f7;
+    height: 400px;
+}
+
+.hero h1 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.description {
+    font-size: 14px;
+    color: #555555;
+    margin-bottom: 24px;
+}
+
+.join-button {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+}
+
+/* 이벤트 섹션 */
+.events {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.events h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.location {
+    color: #007bff;
+}
+
+/* 이벤트 카드 */
+.event-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* 중앙 정렬 */
+    gap: 20px;
+}
+
+.event {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 8px;
+    width: 280px; /* 카드 너비 고정 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.event h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.event p {
+    font-size: 13px;
+    color: #555555;
+    margin-bottom: 4px;
+}
+
