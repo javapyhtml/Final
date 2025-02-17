@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Untree.co" name="author">
+    <link href="/static/favicon.png" rel="shortcut icon">
+
+    <meta content="" name="description"/>
+    <meta content="bootstrap, bootstrap4" name="keywords"/>
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Source+Serif+Pro:wght@400;700&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="/css/owl.carousel.min.css" rel="stylesheet">
+    <link href="/css/owl.theme.default.min.css" rel="stylesheet">
+    <link href="/css/jquery.fancybox.min.css" rel="stylesheet">
+    <link href="/fonts/icomoon/style.css" rel="stylesheet">
+    <link href="/fonts/flaticon/font/flaticon.css" rel="stylesheet">
+    <link href="/css/daterangepicker.css" rel="stylesheet">
+    <link href="/css/aos.css" rel="stylesheet">
+    <link href="/css/header.css" rel="stylesheet">
+    <link href="/css/boardform.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+
+
+    <title>KeePet - Premium Pet Sitter</title>
+</head>
+<style>
+
+</style>
+
+<body id="bBody">
+
+<!-- ##### Header Area Start ##### -->
+<header class="header-area">
+    <div th:replace="~{header.html}"></div>
+</header>
+
+</br></br>
+</br></br>
+
+<div class="row">
+    <div class="form-content">
+        <form action="/bWrite" class="form" enctype="multipart/form-data" method="post" name="bWriteForm">
+            <input name="UserId" th:value="${session.loginId}" type="hidden"/>
+
+            <div id="contents">
+                <label for="BTitle">제목</label>
+                <input class="form-control custom-input" id="BTitle" name="BTitle" readonly style="border: none" type="text"/>
+
+                <label for="BTitle">게시글 비밀번호</label>
+                <input class="password" type="text">
+
+                <label for="Guardian_Name">보호자 이름</label>
+                <input id="Guardian_Name" placeholder="이름을 입력해주세요." name="GuardianName" type="text">
+
+                <label for="Guardian_Phone">보호자 연락처</label>
+                <input id="Guardian_Phone" maxlength="11" name="GuardianPhone" pattern="[0-9]{11}"
+                       placeholder="'-'없이 숫자만 입력해주세요." type="text">
+
+                <label for="Guardian_Address">보호자 주소</label>
+                <input onclick="sample6_execDaumPostcode()" type="button" id="postCode" value="우편번호 찾기"><br>
+                <input id="bSample6_address" placeholder="주소" type="text"><br>
+                <input id="Guardian_Address" name="GuardianAddress" type="hidden">
+
+                <label for="petNum">반려견 선택</label>
+                <select class="form-control custom-select" id="petNum" name="PetNum">
+                    <option value="">-- 선택 --</option>
+                    <!-- 서버에서 전달한 반려견 목록을 동적으로 출력 -->
+                    <th:block th:each="pet : ${pets}">
+                        <option th:text="${pet.petName}" th:value="${pet.petNum}"></option>
+                    </th:block>
+                </select>
+
+                <br/>
+
+                <label for="bService">원하는 서비스</label>
+                <div class="options">
+                    <!-- 서비스 선택 버튼들 -->
+                    <div class="options">
+                        <button class="option" onclick="selectOption(event, 1)" data-service="1" type="button">산책</button>
+                        <button class="option" onclick="selectOption(event, 2)" data-service="2" type="button">목욕</button>
+                        <button class="option" onclick="selectOption(event, 3)" data-service="3" type="button">미용</button>
+                        <button class="option" onclick="selectOption(event, 4)" data-service="4" type="button">병원</button>
+                        <button class="option" onclick="selectOption(event, 5)" data-service="5" type="button">공항픽업</button>
+                    </div>
+                </div>
+                <div class="selected" id="selectedOption"></div>
+                <div class="another-selected" id="anotherSelectedOption"></div>
+                <input id="bService" name="BServices" required type="hidden"/>
+
+                <label for="Reservation_Date">예약 날짜</label>
+                <input id="Reservation_Date" placeholder="예약 날짜를 선택해주세요." name="ReservationDate" type="text">
+
+                <label for="bTime">예약 시간</label>
+                <div class="options1">
+                    <button class="option1" data-option="1" type="button">풀타임(오전 8시 ~ 오후 7시)</button>
+                    <button class="option1" data-option="2" type="button">하프타임A(오전 8시 ~ 오후 2시)</button>
+                    <button class="option1" data-option="3" type="button">하프타임B(오후 2시 ~ 오후 7시)</button>
+                    <button class="option1" data-option="4" type="button">파트타임(상세내용에 표기)</button>
+                </div>
+                <div class="selected" id="selectedOption6"></div>
+                <input id="bTime" name="BTime" required type="hidden"/>
+
+                <label for="B_Contents">상세 내용</label>
+                <textarea id="B_Contents" placeholder="파트타임(원하시는 시간대), 요청사항 등을 입력해주세요." name="BContents" type="text"></textarea>
+
+                <label for="B_File">첨부파일</label>
+                <input id="B_File" name="BFile" type="file"/>
+                <br/><img id="preImage" width="150px"/>
+
+                <div id="button">
+                    <input id="bSubmitForm" type="submit" value="예약"/>
+                    <input id="cancel" type="button" value="취소"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/jquery.waypoints.min.js"></script>
+<script src="/js/jquery.fancybox.min.js"></script>
+<script src="/js/aos.js"></script>
+<script src="/js/moment.min.js"></script>
+<script src="/js/daterangepicker.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/custom.js"></script>
+
+</body>
+
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+<script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+
+
+    // 서비스 다중 선택 처리
+    let selectedServices = [];
+
+    // 원하는 서비스 다중 선택 처리
+    function selectOption(event, option) {
+        const serviceButton = event.target; // 클릭된 버튼
+        const serviceButtonText = serviceButton.textContent.trim(); // 버튼 텍스트(서비스 이름)
+
+        // "공항픽업" 선택 시 다른 서비스 선택 불가능하게 처리
+        if (option === 5) {
+            // "공항픽업"을 선택한 경우
+            if (!selectedServices.includes(5)) {
+                // "공항픽업"이 선택되지 않았다면 배열 초기화
+                selectedServices = [5];
+                // 모든 버튼 비활성화 후 "공항픽업" 활성화
+                document.querySelectorAll('.options button').forEach(button => {
+                    button.classList.remove('selected');
+                });
+                serviceButton.classList.add('selected'); // "공항픽업" 버튼 스타일 변경
+            } else {
+                // 이미 "공항픽업" 선택 시 제거
+                selectedServices = [];
+                serviceButton.classList.remove('selected'); // "공항픽업" 선택 해제
+            }
+        } else {
+            // 다른 서비스를 선택한 경우 "공항픽업"이 이미 선택되었는지 확인
+            if (selectedServices.includes(5)) {
+                alert("공항픽업을 선택한 경우 다른 서비스는 선택할 수 없습니다.");
+                return; // 선택 취소
+            }
+        }
+
+        // 선택된 서비스가 배열에 이미 있는지 확인
+        const index = selectedServices.indexOf(option);
+
+        if (index === -1) {
+            // 선택되지 않은 경우, 배열에 추가
+            selectedServices.push(option);
+            serviceButton.classList.add('selected');  // 버튼 스타일 변경
+        } else {
+            // 이미 선택된 경우, 배열에서 삭제하지 않음
+            serviceButton.classList.add('selected');  // 버튼 스타일 변경 (선택 상태로 유지)
+        }
+
+        // 선택된 서비스들을 화면에 표시 (삭제되지 않고 계속 누적)
+        updateSelectedServices();
+    }
+
+    // '추가된 서비스'에서 클릭하면 해당 서비스 취소
+    document.getElementById('anotherSelectedOption').addEventListener('click', function(event) {
+        const clickedService = event.target;
+
+        if (clickedService.classList.contains('remove-service')) {
+            const serviceId = parseInt(clickedService.getAttribute('data-service'));
+
+            // 해당 서비스가 배열에서 제거
+            const index = selectedServices.indexOf(serviceId);
+            if (index !== -1) {
+                selectedServices.splice(index, 1);  // 배열에서 해당 옵션 제거
+                // 버튼 스타일 변경
+                const serviceButton = document.querySelector(`button[data-service="${serviceId}"]`);
+                if (serviceButton) {
+                    serviceButton.classList.remove('selected');
+                }
+            }
+
+            // 다시 선택된 서비스들 화면에 반영
+            updateSelectedServices();
+        }
+    });
+
+    // 선택된 서비스 목록을 화면에 갱신
+    function updateSelectedServices() {
+        const anotherSelectedDiv = document.getElementById('anotherSelectedOption');
+
+        // 화면에 표시할 서비스 이름 설정
+        const serviceNames = {
+            1: "산책",
+            2: "목욕",
+            3: "미용",
+            4: "병원",
+            5: "공항픽업",
+        };
+
+        // 선택된 서비스들을 화면에 표시 (다시 표시하도록)
+        const selectedServiceHTML = selectedServices.map(id => {
+            return `<span class="service">${serviceNames[id]} <button class="remove-service" data-service="${id}">×</button></span>`;
+        }).join(', ');
+
+        // 선택된 서비스들을 '추가된 서비스' 영역에만 표시
+        anotherSelectedDiv.innerHTML = selectedServiceHTML;
+
+        // 다중 선택된 서비스 값들을 숨겨진 input에 쉼표로 구분하여 저장
+        document.getElementById('bService').value = selectedServices.join(',');
+
+        // 선택된 서비스들 콘솔 출력
+        console.log('선택된 서비스들:', selectedServices);
+
+        // 선택된 반려견 이름 가져오기
+        const petSelect = document.getElementById('petNum'); // 반려견 선택 드롭다운
+        const petName = petSelect.options[petSelect.selectedIndex].text; // 선택된 옵션의 텍스트 (반려견 이름)
+
+        // 제목 설정 로직
+        let title = "";
+        if (selectedServices.includes(5)) {
+            title = `${petName}을 데려다 주세요!`;
+        } else if (selectedServices.length > 0) {
+            title = `${petName}과 시간을 보내요!`;
+        }
+
+        // 제목 입력 필드에 자동 입력
+        document.getElementById('BTitle').value = title;
+    }
+
+
+    // 예약 시간 선택
+    document.querySelectorAll('.options1 .option1').forEach(button => {
+        button.addEventListener('click', function() {
+            const option = this.getAttribute('data-option'); // data-option 속성 값 가져오기
+
+            // 버튼을 모두 비활성화 상태로 초기화
+            const buttons = document.querySelectorAll('.options1 .option1');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // 선택된 버튼에 active 클래스 추가
+            this.classList.add('active');
+
+            // 선택된 시간 값을 hidden input에 설정
+            document.getElementById('bTime').value = option;
+            console.log('선택된 예약 시간:', option);
+        });
+    });
+
+
+    // 다음 주소 API
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                // 도로명 주소 또는 지번 주소 선택
+                if (data.userSelectedType === 'R') {
+                    addr = data.roadAddress;  // 도로명 주소
+                } else {
+                    addr = data.jibunAddress;  // 지번 주소
+                }
+
+                // 도로명 주소에 "인천"이 포함되어 있는지 체크
+                if (addr.indexOf("인천") === -1) {
+                    alert("인천에 해당하는 주소만 검색할 수 있습니다.");
+                    return; // "인천"이 포함되지 않은 주소는 검색 종료
+                }
+
+                // 인천 지역일 경우, 주소를 입력
+                document.getElementById("bSample6_address").value = addr;
+            }
+        }).open();
+    }
+
+    // 주소 합치기
+    $('#bSubmitForm').click(() => {
+        let Guardian_Address = $('#Guardian_Address');
+
+        let addr1 = $('#bSample6_address').val();
+
+        Guardian_Address.val(`${addr1}`);
+        // 인천시 미추홀구 매소홀로 6-32, 태승빌딩 5층
+
+        bWriteForm.submit();
+
+    });
+
+    //유저 프로파일 미리보기
+    $('#B_File').on('change', function (event) {
+        let file = event.target.files[0];  // 선택한 파일
+        console.log(file);  // 파일 객체가 잘 읽혔는지 확인
+        if (file) {
+            let reader = new FileReader();  // FileReader 생성
+
+            reader.onload = function (e) {
+                console.log(e.target.result);  // 읽힌 파일의 URL을 콘솔로 출력하여 확인
+                $('#preImage').attr('src', e.target.result);  // 미리보기 이미지
+            };
+
+            // 파일을 Base64 데이터 URL로 변환
+            reader.readAsDataURL(file);  // FileReader가 Base64로 변환
+        } else {
+            console.log('파일이 선택되지 않았습니다');
+        }
+    });
+
+    // 날짜 달력 형식으로 표기
+    document.addEventListener('DOMContentLoaded', function () {
+        flatpickr("#Reservation_Date", {
+            locale: "ko", // 한국어 설정
+            dateFormat: "Y-m-d", // 날짜 형식
+            minDate: "today", // 오늘 날짜 이후로만 선택 가능
+            altInput: true, // 입력 필드에 달력 형식으로 보여주기
+            altFormat: "Y F J", // 표시 형식
+            allowInput: true, // 사용자 입력 가능
+        });
+    });
+
+    // 유저의 반려견 정보 불러오기
+    document.addEventListener("DOMContentLoaded", function () {
+        const pets = [];
+        const petSelect = document.getElementById("petNum");
+
+        // pets 배열을 통해 옵션 추가
+        pets.forEach(pet => {
+            const option = document.createElement("option");
+            option.value = pet.petNum;
+            option.textContent = pet.petName;
+            petSelect.appendChild(option);
+        });
+    });
+
+    // 연락처 입력 필드에 숫자만 입력되도록 제한
+    $("#Guardian_Phone").on("input", function () {
+        var value = $(this).val();
+        var sanitizedValue = value.replace(/[^0-9]/g, ""); // 숫자 이외의 문자 제거
+        $(this).val(sanitizedValue);
+
+        // 연락처 유효성 검사 (010을 포함하여 검사)
+        if (!/^[0-9]{8}$/.test(phone) || phone.length !== 11) {
+            alert("연락처를 010으로 시작하는 11자리 숫자(-없이)로 입력해주세요.");
+            return;
+        }
+    });
+
+</script>
+
+</html>

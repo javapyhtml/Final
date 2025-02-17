@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeePet - Premium Pet Sitter</title>
+    <link rel="stylesheet" href="/css/service.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+</head>
+<body>
+
+<header>
+    <div th:replace="~{header.html}"></div>
+</header>
+
+<section class="hero">
+    <div style="z-index: 2; position: relative;">
+        <h1>Keepet</h1>
+        <p>반려견과 반려인 모두를 생각한<br>1:1 맞춤 펫시팅 서비스</p>
+        <p>오랜시간 집을 비우거나 갑작스럽게 일이 생겼을 때,<br>우리 아이들이 걱정되셨나요?</p>
+    </div>
+</section>
+
+<main>
+    <section class="service">
+        <div class="service-item">
+            <img src="/images/산책.png" alt="산책 아이콘" class="left">
+            <div class="text">
+                <h2>산책</h2>
+                <p>보호자에게 안내 받아 반려견이 안정을 느낄 수 있는 코스로 산책<br>펫시터와 함께 안전한 산책</p>
+            </div>
+        </div>
+
+        <div class="service-item">
+            <div class="text">
+                <h2>목욕</h2>
+                <p>전문 펫시터의 기술로<br>물을 싫어하는 아이도 불안감 없이<br>편안한 목욕 및 드라이</p>
+            </div>
+            <img src="/images/목욕.png" alt="목욕 아이콘" class="right">
+        </div>
+
+        <div class="service-item">
+            <img src="/images/병원.png" alt="병원 아이콘" class="left">
+            <div class="text">
+                <h2>병원</h2>
+                <p>보호자의 안내에 따라<br>항상 가는 병원에 예약, 진료 후 픽업까지<br>(병원비 추후 청구 불가)</p>
+            </div>
+        </div>
+
+        <div class="service-item">
+            <div class="text">
+                <h2>픽업 서비스</h2>
+                <p>부득이하게 이동이 불가능한 상황일 경우<br>보호자 대신 픽업 서비스 가능</p>
+            </div>
+            <img src="/images/픽업.png" alt="픽업 아이콘" class="right">
+        </div>
+
+        <div class="service-item">
+            <img src="/images/일지.png" alt="돌봄일지 아이콘" class="left">
+            <div class="text">
+                <h2>킵펫 돌봄 일지</h2>
+                <p>남의 손에 맡긴 내 반려견 걱정에 불안한 보호자들을 위한<br>하루하루 반려견을 일상과 관리 내용을 적는 킵펫 돌봄 일지</p>
+            </div>
+        </div>
+        <div class="service-item">
+            <div class="text">
+                <h2>공항택시 서비스</h2>
+                <p>반려견과 함께 여행을 가거나 유기견을 공항까지 데려다줘야 하는데
+                    <br>마땅한 이동수단이 없을 때 이용 가능한 펫 콜택시</p>
+            </div>
+            <img src="/images/공항택시.png" alt="공항택시 아이콘" class="right">
+        </div>
+    </section>
+
+<br>
+<br>
+<br>
+<br>
+
+    <section class="price">
+        <div class="table-container">
+            <table class="price-table">
+                <thead>
+                <tr>
+                    <th rowspan="2">구분</th>
+                    <th colspan="3">소형견<br>(7kg 미만)</th>
+                    <th colspan="3">중형견<br>(7~15kg)</th>
+                    <th colspan="3">대형견<br>(15kg 이상)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>시간 돌봄</td>
+                    <td colspan="3">10,000원</td>
+                    <td colspan="3">12,000원</td>
+                    <td colspan="3">14,000원</td>
+                </tr>
+                <tr>
+                    <td>산책 (시간당)</td>
+                    <td colspan="3">10,000원</td>
+                    <td colspan="3">14,000원</td>
+                    <td colspan="3">20,000원</td>
+                </tr>
+                <tr>
+                    <td>목욕</td>
+                    <td colspan="3">15,000원</td>
+                    <td colspan="3">20,000원</td>
+                    <td colspan="3">25,000원</td>
+                </tr>
+                <tr>
+                    <td>병원 (진료비 제외)</td>
+                    <td colspan="3">8,000원</td>
+                    <td colspan="3">10,000원</td>
+                    <td colspan="3">20,000원</td>
+                </tr>
+                <tr>
+                    <td>픽업 (1.6km당)</td>
+                    <td colspan="3">5,000원</td>
+                    <td colspan="3">10,000원</td>
+                    <td colspan="3">15,000원</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+
+        <section class="notice">
+        <p>※ 다음과 같은 서비스는 제공할 수 없습니다.</p>
+            <br>
+        <ul>
+            <li>실내청소, 세탁, 쓰레기 분리수거 등의 일반 가사업무</li>
+            <li>주사 또는 투약 행위(수의사법에 의해 금지된 의료행위 일체)</li>
+            <li>반려동물 외 육아업무</li>
+                    </ul>
+    </section>
+
+</main>
+</body>
+</html>
