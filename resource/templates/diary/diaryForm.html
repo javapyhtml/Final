@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>KeePet - Premium Pet Sitter</title>
+    <link href="/css/adminwrite.css" rel="stylesheet"> <!-- 스타일 시트 링크 추가 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <main>
+        <form action="/diary/write" enctype="multipart/form-data" id="diaryForm" method="post" name="DWriteForm">
+            <input name="bNum" th:value="${bNum}" type="hidden"/>
+            <input name="petNum" th:value="${petNum}" type="hidden"/>
+            <input type="hidden" name="reservationDate" th:value="${reservationDate}"/>
+            <input type="hidden" name="bTime" th:value="${bTime}"/>
+
+            <div class="reservation-box">
+                <div class="header">
+                    <p>반려견: <span th:text="${petName}"></span></p>
+                    <p>예약 날짜: <span id="reservationDateText"></span></p>  <!-- 예약 날짜 표시 -->
+                    <p>예약 시간: <span id="timeText"></span></p>  <!-- 예약 시간 표시 -->
+                </div>
+
+                <div class="content">
+                    <div class="service-list first-page active">
+                        <table class="table">
+                            <tr>
+                                <td class="service-cell">
+                                    <img alt="meal" src="/images/meal.png">
+                                    <span>식사</span>
+                                </td>
+                                <td><textarea name="meal"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td class="service-cell">
+                                    <img alt="snack" src="/images/snack.png">
+                                    <span>간식</span>
+                                </td>
+                                <td><textarea name="snack"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td class="service-cell">
+                                    <img alt="play" src="/images/play.png">
+                                    <span>놀이</span>
+                                </td>
+                                <td><textarea name="play"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td class="service-cell">
+                                    <img alt="poop" src="/images/poop.png">
+                                    <span>배변</span>
+                                </td>
+                                <td><textarea name="toilet"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td class="service-cell">
+                                    <img alt="sleep" src="/images/sleep.png">
+                                    <span>수면</span>
+                                </td>
+                                <td><textarea name="sleep"></textarea></td>
+                            </tr>
+                        </table>
+                        <div class="arrow-container">
+                        </div>
+                    </div>
+                    <div class="service-list second-page">
+                        <table class="table">
+                            <div class="arrow-container">
+                            </div>
+                            <tr>
+                                <td class="service-cell">
+                                    <img alt="bath" src="/images/bath.png">
+                                    <span>목욕</span>
+                                </td>
+                                <td><textarea name="bath"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td class="service-cell">
+                                    <img alt="hospital" src="/images/hospital.png">
+                                    <span>병원</span>
+                                </td>
+                                <td><textarea name="hospital"></textarea></td>
+                            </tr>
+                            <tr>
+                                <td class="service-cell">
+                                    <img alt="walk" src="/images/walk.png">
+                                    <span>산책</span>
+                                </td>
+                                <td>
+                                    <select name="walkTime">
+                                        <option value="30분">30분</option>
+                                        <option value="1시간">1시간</option>
+                                        <option value="2시간">2시간</option>
+                                    </select>
+                                    <textarea name="walk">
+                                    </textarea>
+                                </td>
+                            </tr>
+                            <tr class="photo-row">
+                                <td colspan="2" class="photo-container">
+                                    <span>활동 사진</span>
+                                    <input id="PFile" name="PetPlayProfile" type="file"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+            <img id="prev" alt="prev" height="30px" src="/images/prev.png" width="30px">
+            <button type="submit" id="save" style="border: none; background-color: transparent;">
+                <img alt="save" height="30px" src="/images/save_arrow.png" width="30px">
+            </button>
+            <img id="next" alt="next" height="30px" src="/images/next.png" width="30px">
+            </div>
+        </form>
+    </main>
+</div>
+</body>
+<script>
+    // Define the formatDate function
+    function formatDate(date) {
+        const formattedDate = new Date(date);
+        const day = String(formattedDate.getDate()).padStart(2, '0');
+        const month = String(formattedDate.getMonth() + 1).padStart(2, '0');
+        const year = formattedDate.getFullYear();
+        return `${year}-${month}-${day}`;  // 수정된 부분: 년-월-일 형식
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const rawDate = `[[${reservationDate}]]`;  // 서버에서 전달된 날짜
+        document.getElementById('reservationDateText').textContent = formatDate(rawDate);  // 예약 날짜 출력
+    });
+
+    $(document).ready(function () {
+        // 페이지 전환
+        $('#next').on('click', function () {
+            $('.first-page').removeClass('active');
+            $('.second-page').addClass('active');
+        });
+        $('#prev').on('click', function () {
+            $('.second-page').removeClass('active');
+            $('.first-page').addClass('active');
+        });
+        // 파일 미리보기
+        $('#PFile').on('change', function (event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#preImage').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                $('#preImage').attr('src', '');
+            }
+        });
+    });
+
+    const bTimeData = `[[${bTime}]]`;  // 서버에서 가져온 bTime 값
+
+    function getTimeText(btime) {
+        switch (Number(btime)) { // 문자열로 전달될 수 있으므로 Number()로 변환
+            case 1:
+                return "풀타임(오전 8시 ~ 오후 7시)";
+            case 2:
+                return "파트타임(아래에 표기)";
+            case 3:
+                return "하프타임A(오전 8시 ~ 오후 2시)";
+            case 4:
+                return "하프타임B(오후 2시 ~ 오후 7시)";
+            default:
+                return "알 수 없음";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('timeText').textContent = getTimeText(bTimeData);  // 예약 시간 출력
+    });
+</script>
+</html>
