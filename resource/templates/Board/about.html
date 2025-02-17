@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KeePet - Premium Pet Sitter</title>
+  <link rel="shortcut icon" href="/images/favicon.ico">
+  <link rel="stylesheet" href="/css/about.css">
+  <link rel="stylesheet" href="/css/header.css">
+</head>
+<body>
+
+<header>
+  <div th:replace="~{header.html}"></div>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>우리 아이를 위한 돌봄서비스<br>믿고 맡길 수 있을까요?</h1>
+    <p>
+      킵펫은요!<br>
+      고객님들의 소중한 아이들을
+      안심하고 맡길 수 있도록<br>
+      자격증과 반려 경험이 풍부한 펫시터를
+      선발하고 있습니다.
+    </p>
+  </div>
+</section>
+
+
+
+<!-- 주요 특징 섹션 -->
+<section class="features">
+  <h2>믿을 수 있는<br>반려견 전문 킵펫시터!</h2>
+
+  <div class="feature-list">
+  <div class="feature-item">
+    <img src="/images/certification.png" alt="자격증 아이콘">
+    <h2>자격증 취득</h2>
+    <p>반려동물 관련 자격증을<br>취득한 매니저를 우선적으로 선별합니다.</p>
+  </div>
+  <div class="feature-item">
+    <img src="/images/education.png" alt="교육 아이콘">
+    <h2>전문교육이수</h2>
+    <p>인명구조관리와 지역 여성인력개발센터를 통해 최소 100시간 이상의 교육을 이수한 매니저를 선별합니다.</p>
+  </div>
+  <div class="feature-item">
+    <img src="/images/identify.png" alt="신원검증 아이콘">
+    <h2>철저한 신원검증</h2>
+    <p>1, 2차 면접과 전화면접을 진행하여<br>철저히 선별 및 고객님도 모니터링할 수 있도록 진행합니다.</p>
+  </div>
+  <div class="feature-item">
+    <img src="/images/reward.png" alt="안전보상 아이콘">
+    <h2>안전보상 프로그램</h2>
+    <p>돌봄 진행 중 예상치 못한 사고에 대비해<br>안전보상 프로그램이 운영됩니다.</p>
+  </div>
+  </div>
+</section>
+
+<section class="sitters-carousel">
+  <h2 style="margin-bottom: 20px">킵펫시터엔 어떤 분들이 활동하나요?</h2>
+
+  <div class="carousel-wrapper">
+
+    <!-- 프로필 카드들 -->
+    <div class="carousel">
+      <div class="sitter-profile">
+        <img src="/images/sitter1.png" alt="양혜 펫시터">
+      </div>
+      <div class="sitter-profile">
+        <img src="/images/sitter2.png" alt="김혜 펫시터">
+      </div>
+      <div class="sitter-profile">
+        <img src="/images/sitter3.png" alt="전현* 펫시터">
+      </div>
+      <div class="sitter-profile">
+        <img src="/images/sitter4.png" alt="펫시터 4">
+      </div>
+      <div class="sitter-profile">
+        <img src="/images/sitter5.png" alt="펫시터 5">
+      </div>
+      <div class="sitter-profile">
+        <img src="/images/sitter6.png" alt="펫시터 6">
+      </div>
+      <div class="sitter-profile">
+        <img src="/images/sitter7.png" alt="펫시터 7">
+      </div>
+      <div class="sitter-profile">
+        <img src="/images/sitter8.png" alt="펫시터 8">
+      </div>
+      <div class="sitter-profile">
+        <img src="/images/sitter9.png" alt="펫시터 9">
+      </div>
+    </div>
+
+  </div>
+</section>
+<footer>
+  <p>© 2025 KeePet. All rights reserved.</p>
+</footer>
+</body>
+
+
+<script>
+
+  const carousel = document.querySelector('.carousel');
+  const sitterProfiles = document.querySelectorAll('.sitter-profile');
+  const totalProfiles = sitterProfiles.length;
+
+  const slideWidth = 483; // 카드 고정 너비
+  const gap = 10; // 카드 간 간격
+  const offset = 60; // 좌우 패딩 (빈 공간)
+
+  // 현재 슬라이드 위치
+  let currentIndex = totalProfiles; // 복제된 슬라이드 기준으로 시작
+
+  // 슬라이더 복제: 앞뒤로 슬라이드 복제
+  function cloneSlides() {
+    sitterProfiles.forEach((profile) => {
+      const cloneBefore = profile.cloneNode(true);
+      const cloneAfter = profile.cloneNode(true);
+
+      carousel.appendChild(cloneAfter); // 마지막에 추가
+      carousel.insertBefore(cloneBefore, carousel.firstChild); // 처음에 추가
+    });
+  }
+
+  // 슬라이더 초기화
+  function initializeCarousel() {
+    cloneSlides();
+
+    const totalCloned = totalProfiles * 2; // 앞뒤 복제된 슬라이드 개수
+    carousel.style.width = `${
+            (totalProfiles + totalCloned) * (slideWidth + gap)
+    }px`; // 캐러셀 전체 너비 설정
+    carousel.style.transform = `translateX(-${
+            currentIndex * (slideWidth + gap) - offset
+    }px)`; // 복제된 시작 위치로 이동
+  }
+
+  // 슬라이드 이동 함수
+  function updateCarousel() {
+    let isTransitioning;
+    if (isTransitioning) return;
+    isTransitioning = true;
+
+    const moveWidth = currentIndex * (slideWidth + gap) - offset; // 이동 거리
+    carousel.style.transition = 'transform 0.5s ease';
+    carousel.style.transform = `translateX(-${moveWidth}px)`;
+
+    // 트랜지션 종료 후 자연스러운 순환 처리
+    carousel.addEventListener('transitionend', () => {
+      if (currentIndex >= totalProfiles * 2) {
+        // 마지막 복제 슬라이드에서 원래 첫 번째로 이동
+        carousel.style.transition = 'none';
+        currentIndex = totalProfiles;
+        carousel.style.transform = `translateX(-${
+                currentIndex * (slideWidth + gap) - offset
+        }px)`;
+      } else if (currentIndex < totalProfiles) {
+        // 첫 번째 복제 슬라이드에서 원래 마지막으로 이동
+        carousel.style.transition = 'none';
+        currentIndex = totalProfiles * 2 - 1;
+        carousel.style.transform = `translateX(-${
+                currentIndex * (slideWidth + gap) - offset
+        }px)`;
+      }
+      isTransitioning = false;
+    });
+  }
+
+  // 좌우 클릭 이벤트
+  document.querySelector('.carousel-wrapper').addEventListener('click', (e) => {
+    const wrapperRect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX;
+
+    if (clickX < wrapperRect.left + wrapperRect.width / 2) {
+      // 왼쪽 클릭
+      currentIndex--;
+    } else {
+      // 오른쪽 클릭
+      currentIndex++;
+    }
+
+    updateCarousel();
+  });
+
+  // 초기화 호출
+  initializeCarousel();
+
+
+
+
+
+
+</script></html>
