@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>KeePet - Premium Pet Sitter</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Poppins:wght@400;600&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+
+    <!-- 기본 스타일 -->
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff;
+            color: #333;
+        }
+
+        .review-album {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 두 개의 열 */
+            grid-auto-rows: auto; /* 높이는 내용에 맞게 */
+            gap: 30px; /* 카드 간 간격 */
+            padding: 20px;
+            max-width: 700px; /* 적절한 폭 설정 */
+            margin: 0 auto;
+            overflow: scroll; /* 두 줄을 초과하는 내용은 숨김 */
+            scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
+        }
+
+        .review-album::-webkit-scrollbar {
+            display: none; /* 크롬, 사파리에서 스크롤바 숨기기 */
+        }
+
+        /* 개별 리뷰 카드 스타일 */
+        .review-card:nth-child(odd) {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border-radius: 20px;
+            border: 1px solid #85AECE;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* 호버 효과 추가 */
+        }
+
+        .review-card:nth-child(even) {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border-radius: 20px;
+            border: 1px solid #fea443;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* 호버 효과 추가 */
+        }
+
+        /* 짝수 번째 카드는 아래로 살짝 내려가도록 설정 */
+        .review-card:nth-child(even) {
+            transform: translateY(80px);
+        }
+
+        .review-avatar img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .review-content .user-id {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .review-content .review-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            padding: 16px 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center; /* 세로 가운데 정렬 */
+            justify-content: center; /* 가로 정렬 */
+            gap: 8px; /* 따옴표와 텍스트 사이 간격 */
+        }
+
+        .quote-mark {
+            font-size: 50px;
+            font-weight: bold;
+            color: #f4e8ff;
+        }
+
+        .quote-mark:first-child {
+            top: -12px;
+            left: -12px;
+        }
+
+        .quote-mark:last-child {
+            bottom: -12px;
+            right: -12px;
+        }
+
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #343a40;
+        }
+        .rating-box {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 60%;
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            margin: auto;
+            max-width: 800px;
+        }
+        .rating-section {
+            text-align: center;
+            flex: 1;
+        }
+        .rating-score {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        .total-reviews {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .stars {
+            color: #2d66f2;
+            font-size: 18px;
+        }
+        .rating-ratio {
+            width: 100%;
+        }
+        .bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px 0;
+        }
+        .bar span {
+            width: 50px;
+            text-align: right;
+            margin-right: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+        .bar div {
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            flex: 1;
+            max-width: 200px;
+            position: relative;
+        }
+        .bar.five-star div {
+            background: #2d66f2; /* 5점 막대기만 파란색 */
+        }
+        .bar .count {
+            margin-left: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .rating-box {
+                flex-direction: column;
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div th:replace="~{header.html}"></div>
+</header>
+<br><br>
+<div class="rating-box">
+    <div class="rating-section">
+        <div>고객 평점</div>
+        <div class="rating-score">4.99<span style="color: #aaa;">/5.0</span></div>
+        <div class="stars">★★★★★</div>
+    </div>
+
+    <div class="rating-section">
+        <div>리뷰 수</div>
+        <div class="total-reviews">105,752</div>
+        <div style="color: #888; font-size: 14px;">(고객만족도 99.7%)</div>
+    </div>
+
+    <div class="rating-section rating-ratio">
+        <div>평점 비율</div>
+        <div class="bar five-star">
+            <span style="color:#2d66f2;">5점</span>
+            <div></div>
+            <span class="count">105,239</span>
+        </div>
+        <div class="bar">
+            <span>4점</span>
+            <div></div>
+            <span class="count">154</span>
+        </div>
+        <div class="bar">
+            <span>3점</span>
+            <div></div>
+            <span class="count">72</span>
+        </div>
+        <div class="bar">
+            <span>2점</span>
+            <div></div>
+            <span class="count">101</span>
+        </div>
+        <div class="bar">
+            <span>1점</span>
+            <div></div>
+            <span class="count">186</span>
+        </div>
+    </div>
+</div>
+<main>
+    <div class="review-album" id="review-album">
+        <!-- AJAX로 데이터를 불러와 동적으로 삽입 -->
+    </div>
+</main>
+
+<footer>
+    &copy; 2025 KeePet. All rights reserved.
+</footer>
+
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // AJAX로 데이터 가져오기
+        $.ajax({
+            type: "POST",
+            url: "/revList",
+            dataType: "json",
+            success: function (result) {
+                const reviewAlbum = $('#review-album');
+                if (result.length > 0) {
+                    result.forEach(review => {
+                        const reviewCard = `
+                            <div class="review-card">
+                                <div class="review-avatar">
+                                    <img src="/upload/${review.revFileName}" onerror="this.src='/images/default.png'" alt="사용자 이미지">
+                                </div>
+                                <div class="review-content">
+
+                                    <p class="user-id"><span class="quote-mark">“</span>${review.userId}<span class="quote-mark">“</span></p>
+                                    <p class="review-text">${review.revContents}</p>
+
+                                </div>
+                            </div>
+                        `;
+                        reviewAlbum.append(reviewCard);
+                    });
+                } else {
+                    reviewAlbum.html('<p>리뷰가 없습니다.</p>');
+                }
+            },
+            error: function () {
+                alert('리뷰를 불러오는 데 실패했습니다.');
+            }
+        });
+    });
+</script>
+</body>
+</html>
