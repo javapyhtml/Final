@@ -32,7 +32,7 @@
 |:------:|:------:|:------:|:------:|:------:|
 | <img src="https://i.pinimg.com/736x/bd/05/6e/bd056e0ff7138b992464d96dfffe8ff7.jpg" alt="이수연" width="150" height="150"> | <img src="https://i.pinimg.com/enabled_lo_mid/736x/7e/6b/39/7e6b39d071c5a0dc33fd2d61788b964d.jpg" alt="이시연" width="150" height="150"> | <img src="https://i.pinimg.com/736x/61/4d/64/614d64378dda207992c4c70d29452b84.jpg" alt="유기민" width="150" height="150"> | <img src="https://i.pinimg.com/enabled_lo_mid/736x/f3/9f/42/f39f422326264213a1a871ceb97a6bf1.jpg" alt="조다은" width="150" height="150"> | <img src="https://i.pinimg.com/736x/13/ad/a1/13ada1a3dbb6c57f8fec1c386ea31546.jpg" alt="김태우" width="150" height="150"> |
 | FE | FE | PL | FE | FE |
-| [GitHub](https://github.com/javapyhtml) | [GitHub](https://github.com/) | [GitHub](https://github.com/) | [GitHub](https://github.com/) | [GitHub](https://github.com/su-9woo) |
+| [GitHub](https://github.com/javapyhtml) |  |  |  | [GitHub](https://github.com/su-9woo) |
 
 ---
 
